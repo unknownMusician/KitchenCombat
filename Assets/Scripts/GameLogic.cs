@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameLogic : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class GameLogic : MonoBehaviour {
+    public static KitchenLogic kitchen;
+    public static RestaurantLogic restaurant;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected void Awake() {
+        kitchen = GetComponent<KitchenLogic>();
+        restaurant = GetComponent<RestaurantLogic>();
     }
 }

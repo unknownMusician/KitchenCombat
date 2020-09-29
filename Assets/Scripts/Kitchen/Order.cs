@@ -1,0 +1,1 @@
+﻿using System.Collections; using System.Collections.Generic; using UnityEngine;  public class Order : MonoBehaviour {     protected Rigidbody2D rb = null;      protected void Awake() {         rb = GetComponent<Rigidbody2D>();     }      protected void Start() {         rb.velocity = Vector2.left * 0.5f;     } } 
