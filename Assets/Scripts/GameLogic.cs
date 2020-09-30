@@ -37,7 +37,7 @@ public class GameLogic : MonoBehaviour {
         if (Input.GetMouseButtonUp(0)) {
             var localDir = (Vector2)Input.mousePosition - mouseDownPos;
             if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30)
-                Tap();
+                OnTap?.Invoke();
             else
                 Swipe(localDir);
         }
@@ -47,19 +47,17 @@ public class GameLogic : MonoBehaviour {
             if (direction.x == 0)
                 return;
             else if (direction.x > 0)
-                Swipe(SwipeType.Right);
+                OnSwipe?.Invoke(SwipeType.Right);
             else
-                Swipe(SwipeType.Left);
+                OnSwipe?.Invoke(SwipeType.Left);
         } else {
             if (direction.y == 0)
                 return;
             else if (direction.y > 0)
-                Swipe(SwipeType.Up);
+                OnSwipe?.Invoke(SwipeType.Up);
             else
-                Swipe(SwipeType.Down);
+                OnSwipe?.Invoke(SwipeType.Down);
         }
     }
-    protected void Swipe(SwipeType dir) => OnSwipe?.Invoke(dir);
-    protected void Tap() => OnTap?.Invoke();
     public enum SwipeType { Up, Down, Left, Right }
 }

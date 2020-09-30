@@ -7,20 +7,37 @@ public class KitchenLogic : MonoBehaviour {
     public Transform GameMenu { get; set; } = default;
     public RectTransform UIMenu { get; set; } = default;
 
-    protected List<GameLogic.SwipeType> currentCombo = new List<GameLogic.SwipeType>();
+    public Combo combo = default;
+    public class Combo {
+        #region Constructor & k
 
-    protected void OnComboFin() { Debug.Log($"KIYYYAA: {currentCombo[0]} {currentCombo[1]} {currentCombo[2]}"); }
+        protected KitchenLogic k;
+        public Combo(KitchenLogic k) {
+            this.k = k;
+        }
+        #endregion
 
-    private void Awake() {
-
-        GameLogic.L.OnSwipe += (dir) => {
-            currentCombo.Add(dir);
-            Debug.Log(dir);
+        protected List<GameLogic.SwipeType> currentCombo = new List<GameLogic.SwipeType>();
+        public void Add(GameLogic.SwipeType swipe) {
+            currentCombo.Add(swipe);
             if (currentCombo.Count == 3) {
-                OnComboFin();
+                OnComboFin(currentCombo);
                 currentCombo.Clear();
             }
-        };
+        }
+        protected void OnComboFin(List<GameLogic.SwipeType> swipes) {
+            Debug.Log($"KIYYYAA: {swipes[0]} {swipes[1]} {swipes[2]}");
+            // todo: spawn
+        }
     }
 
+    #region Mono
+
+    protected void Awake() {
+        combo = new Combo(this);
+    }
+    protected void OnEnable() {
+        GameLogic.L.OnSwipe += combo.Add;
+    }
+    #endregion
 }
