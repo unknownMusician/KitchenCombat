@@ -8,7 +8,7 @@ public class Table : MonoBehaviour {
     private bool isFree;
 
     public bool getIsFree() {
-        return this.isFree
+        return this.isFree;
     }
 
     public void setIfFree(bool isFree) {
