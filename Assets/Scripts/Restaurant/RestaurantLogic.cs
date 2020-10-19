@@ -2,35 +2,32 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-
-public class RestaurantLogic : MonoBehaviour {
-
+public class RestaurantLogic : MonoBehaviour 
+{
     public Transform GameMenu { get; set; } = default;
     public RectTransform UIMenu { get; set; } = default;
 
-    private CustomerLogic customerLogic;
+    public Transform restaurantMenu;
 
-    void Awake() {
-        GameMenu = GetComponent<Transform>();
-        customerLogic = GetComponent<CustomerLogic>();
-    }
-
-    void Start() {
+    void Start() 
+    {
         StartCoroutine(CustomerSpawning());
     }
 
-    private IEnumerator CustomerSpawning() {
-        while (true) {
+    private IEnumerator CustomerSpawning() 
+    {
+        while (true) 
+        {
             yield return new WaitForSeconds(CalculateDelay() + Random.Range(0, 5000) / 1000);
-            customerLogic.SpawnCustomer();
+            SpawnCustomer();
         }
     }
 
     [SerializeField] private Transform tablesArray;
-    [SerializeField] float coefficient;
+    [SerializeField] float delayCoefficient;
 
-    private float CalculateDelay() {
-
+    private float CalculateDelay() 
+    {
         // Метод расчитывает задержку между приходом покупателей
         // Единицы измерения результата - секунды
 
@@ -39,9 +36,19 @@ public class RestaurantLogic : MonoBehaviour {
         int amountOfTables = tablesArray.childCount;
         int amountOfRecipes = 3;
 
-        float result = 1 / (coefficient * (amountOfTables + amountOfRecipes));
+        float result = 1 / (delayCoefficient * (amountOfTables + amountOfRecipes));
 
         return result;
     }
 
+    [SerializeField] private GameObject customerPrefab;
+
+    public void SpawnCustomer() 
+    {
+        Instantiate(customerPrefab,
+            restaurantMenu.GetChild(3).GetChild(0).position,
+            Quaternion.identity,
+            restaurantMenu.GetChild(1)
+            );
+    }
 }
