@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class RestaurantLogic : MonoBehaviour 
 {
@@ -8,9 +7,15 @@ public class RestaurantLogic : MonoBehaviour
     public RectTransform UIMenu { get; set; } = default;
 
     public Transform restaurantMenu;
+    public GameObject navMesh;
 
     void Start() 
     {
+        /* Instantiate(customerPrefab,
+            restaurantMenu.GetChild(2).GetChild(0).position,
+            Quaternion.identity,
+            restaurantMenu.GetChild(0)
+            ); */
         StartCoroutine(CustomerSpawning());
     }
 
@@ -46,9 +51,26 @@ public class RestaurantLogic : MonoBehaviour
     public void SpawnCustomer() 
     {
         Instantiate(customerPrefab,
-            restaurantMenu.GetChild(3).GetChild(0).position,
+            restaurantMenu.GetChild(2).GetChild(0).position,
             Quaternion.identity,
-            restaurantMenu.GetChild(1)
+            restaurantMenu.GetChild(0)
             );
+    }
+
+    public int GetRandomFreeTableNumber()
+    {
+        Transform tablesArrayMenu = restaurantMenu.GetChild(1).GetChild(1);
+        int tablesArrayLength = restaurantMenu.GetChild(1).GetChild(1).childCount;
+
+        int randomNumber = Random.Range(0, tablesArrayLength);
+        Table randomTable = tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
+
+        while(randomTable.IsFree == false)
+        {
+            randomNumber = Random.Range(0, tablesArrayLength);
+            randomTable = tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
+        }
+
+        return randomNumber;
     }
 }

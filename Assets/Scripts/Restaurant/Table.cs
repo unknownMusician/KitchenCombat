@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
+using System.Threading;
 
-public class Table : MonoBehaviour {
+public class Table : MonoBehaviour 
+{
+    public bool IsFree { get; set; }
+    [SerializeField] private int orderInTablesArray;
 
-    [SerializeField]
-    private bool isFree;
-
-    public bool getIsFree() {
-        return this.isFree;
+    void Awake()
+    {
+        IsFree = true;
     }
 
-    public void setIfFree(bool isFree) {
-        this.isFree = isFree;
-    }
+    void OnCollisionEnter2D(Collision2D other) 
+    {
+        Customer otherCustomerComponent = other.collider.GetComponent<Customer>();
 
+        if ((IsFree == true) & (orderInTablesArray == otherCustomerComponent.currentTableNumber)) 
+        {
+            IsFree = false;
+            otherCustomerComponent.MakeAnOrder();
+            otherCustomerComponent.LeaveRestaurant();
+        }
+    }
 }
