@@ -39,7 +39,7 @@ public class GameLogic : MonoBehaviour {
             if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30)
                 OnTap?.Invoke();
             else
-                Swipe(localDir);
+                Swipe(localDir); // todo: Даня, вот твой свайп - localDir;
         }
     }
     protected void Swipe(Vector2 direction) {

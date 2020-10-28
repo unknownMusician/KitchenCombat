@@ -8,6 +8,7 @@ public class KitchenLogic : MonoBehaviour {
     public RectTransform UIMenu { get; set; } = default;
 
     public Combo combo = default;
+    public Relations restaurant = default;
     public class Combo {
         #region Constructor & k
 
@@ -28,6 +29,14 @@ public class KitchenLogic : MonoBehaviour {
         protected void OnComboFin(List<GameLogic.SwipeType> swipes) {
             Debug.Log($"KIYYYAA: {swipes[0]} {swipes[1]} {swipes[2]}");
             // todo: spawn
+        }
+    }
+
+    public class Relations {
+        public bool ReceiveOrder(Order order) {
+
+            // todo
+            return true;
         }
     }
 

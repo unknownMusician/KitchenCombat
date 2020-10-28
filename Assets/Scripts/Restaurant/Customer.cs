@@ -43,6 +43,8 @@ public class Customer : MonoBehaviour
     public void MakeAnOrder()
     {
         Debug.Log("Я сделал заказ!");
+        // GameLogic.Kitchen.restaurant.ReceiveOrder(new Order(...)) // todo: связь
+
     }
 
     public void LeaveRestaurant()
