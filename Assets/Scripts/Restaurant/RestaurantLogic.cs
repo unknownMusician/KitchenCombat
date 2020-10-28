@@ -8,6 +8,15 @@ public class RestaurantLogic : MonoBehaviour
     public Transform restaurantMenu;
     public Transform TablesArray { get; set; }
 
+    [SerializeField] private InspectorValues inspectorValues = new InspectorValues();
+    [System.Serializable] public class InspectorValues {
+        public Transform TablesArray;
+        public Transform menu123;
+        public GameObject prefab1;
+        public GameObject prefab2;
+        public GameObject prefab3;
+    }
+
     void Awake()
     {
         TablesArray = restaurantMenu.GetChild(1).GetChild(1);
