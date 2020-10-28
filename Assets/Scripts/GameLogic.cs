@@ -5,6 +5,23 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour {
 
+    // Todo-list:
+    // - Full Customer-Order-Dish cycle;
+    // - + UI ↑↑↑
+    // - Day cycle
+    // - After day conclusion (receipt)
+    // - Shop
+    // - Dishes + Ingredients
+    // - Customers
+    // - ...
+    // - Main Menu
+    // - Guide
+    // - Story
+    // - ...
+    // - Application build
+    // - Monetization
+    // - Google Play upload
+
     [SerializeField] protected Transform kitchenGameMenu = default;
     [SerializeField] protected Transform restaurantGameMenu = default;
     [SerializeField] protected RectTransform kitchenUIMenu = default;
