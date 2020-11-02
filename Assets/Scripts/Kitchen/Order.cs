@@ -1,8 +1,19 @@
-﻿using System.Collections; using System.Collections.Generic; using UnityEngine;  public class Order : MonoBehaviour {     public Dish dish;     public float timeToExpire;     public int tableId;      public Order(Dish dish, float timeToExpire, int tableId) {
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Order : MonoBehaviour {
+    public Dish dish = default;
+    public float timeToExpire = default;
+    public int tableId = default;
+
+    public Order(Dish dish, float timeToExpire, int tableId) {
         this.dish = dish;
         this.timeToExpire = timeToExpire;
         this.tableId = tableId;
-    }      public class Dish {
+    }
+
+    public class Dish {
         public List<Ingredient> ingredients;
         public float price;
 
@@ -24,7 +35,9 @@
             }*/
             return new Dish(ingrs, price);
         }
-    }      public class Ingredient {
+    }
+
+    public class Ingredient {
 
         public static List<Ingredient> ingredients = new List<Ingredient>(new Ingredient[] {
             new Ingredient(),
@@ -33,4 +46,5 @@
             new Ingredient()
         });
         // todo
-    } } 
+    }
+}
