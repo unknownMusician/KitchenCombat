@@ -52,28 +52,28 @@ public class MovingUI : MonoBehaviour {
                 ui.StopCoroutine(movingCoroutine);
                 movingCoroutine = null;
             }
-            movingCoroutine = ui.StartCoroutine(Move());
+            movingCoroutine = ui.StartCoroutine(Move(ui));
             // change text
             restaurantKitchenBtn.GetComponentInChildren<TextMeshProUGUI>().text = kitchenLook ? "Kitchen" : "Restaurant";
         }
-        protected IEnumerator Move() {
+        protected IEnumerator Move(MovingUI ui) {
             kitchenLook = !kitchenLook;
-            // float cameraWidth = Camera.main.pixelWidth;
-            float cameraWidthWorld = Mathf.Abs(Camera.main.ScreenToWorldPoint(Vector3.left).x) * 2;
+            float cameraWidthPixels = Camera.main.pixelWidth;
+            float cameraWidthWorld = GameLogic.Constants.SCREEN_WORLD_WIDTH;
             var camTransform = Camera.main.transform;
             float t = 0.2f;
             float l = 0;
             while (l < 1) {
                 float newL = LerpNormalize1(l);
-                float lerp = kitchenLook ? Mathf.Lerp(cameraWidthWorld, 0, newL) : Mathf.Lerp(0, cameraWidthWorld, newL);
-                // transform.position = Vector3.left * Mathf.Lerp(0, cameraWidth, lerp); // move UI
-                camTransform.position = new Vector3(lerp, camTransform.position.y, camTransform.position.z); // move camera
+                float lerp = kitchenLook ? Mathf.Lerp(1, 0, newL) : Mathf.Lerp(0, 1, newL);
+                camTransform.position = new Vector3(lerp * cameraWidthWorld, camTransform.position.y, camTransform.position.z); // move camera
+                ui.transform.position = Vector2.zero; // move UI
                 l += 1 / t * Time.deltaTime;
                 yield return null; // todo
             }
             var fin = kitchenLook ? 0 : cameraWidthWorld;
-            // transform.position = Vector3.left * cameraWidth; // move UI
             camTransform.position = new Vector3(fin, camTransform.position.y, camTransform.position.z); // move camera
+            ui.transform.position = Vector2.zero; // move UI
         }
         protected float LerpNormalize1(float l) {
             float x = (-1 + Mathf.Sqrt(5)) / 2;

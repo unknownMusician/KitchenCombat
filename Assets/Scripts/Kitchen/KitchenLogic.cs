@@ -67,35 +67,47 @@ public class KitchenLogic : MonoBehaviour {
         [SerializeField] private Transform orderMenu = default;
         [SerializeField] private GameObject orderPrefab = default;
         [SerializeField] private Vector2 spawnPos = default;
+        [SerializeField] private Vector2 endPos = default;
         [SerializeField] private float moveSpeed = default;
+        [SerializeField] private float gap = default;
 
         private List<OrderHolder> orderHolders = new List<OrderHolder>();
 
         public void AddOrder(Order order) {
             // todo: check if there is place
             // spawn
-            orderHolders.Add(new OrderHolder(order, orderHolders.Count));
-            Instantiate(order.gameObject, spawnPos, Quaternion.identity, orderMenu);
+            var orderHolder = new OrderHolder(order, orderHolders.Count);
+            orderHolders.Add(orderHolder);
+            order.transform.SetParent(orderMenu);
+            order.transform.position = spawnPos;
+            // start moving
+            orderHolder.coroutine = k.StartCoroutine(MoveOrder(orderHolder));
             // todo: spawn
         }
 
-        private IEnumerator MoveOrders() {
-            while (true) {
-                foreach (var orderHolder in orderHolders) {
-                    orderHolder.order.transform.position += (Vector3)Vector2.left * -moveSpeed;
-                }
+        private IEnumerator MoveOrder(OrderHolder holder) {
+            var orderTransform = holder.order.transform;
+            while (orderTransform.position.x > endPos.x + gap * holder.id) {
+                orderTransform.position += (Vector3)Vector2.left * moveSpeed / 100;
                 yield return new WaitForFixedUpdate();
             }
+            orderTransform.position = endPos + Vector2.right * gap * holder.id;
+            holder.coroutine = null;
         }
 
         public void OnDrawGizmos() {
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireCube(spawnPos, orderPrefab.GetComponent<BoxCollider2D>().size);
+            Gizmos.color = new Color(1, 0.7f, 0);
+            Gizmos.DrawWireCube(endPos, orderPrefab.GetComponent<BoxCollider2D>().size);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(endPos + Vector2.right * gap, orderPrefab.GetComponent<BoxCollider2D>().size);
         }
 
         public class OrderHolder {
-            public Order order;
-            public int id;
+            public Order order = default;
+            public int id = default;
+            public Coroutine coroutine = default;
 
             public OrderHolder(Order order, int id) {
                 this.order = order;
@@ -118,7 +130,7 @@ public class KitchenLogic : MonoBehaviour {
     #endregion
 
     public void TEST() { // todo: TEST
-        orderManager.AddOrder(new Order(Order.Recipe.GenerateRecipe(), 10, 1));
+        orderManager.AddOrder(Order.Create(Order.Recipe.GenerateRecipe(), 10, 1));
     }
 
     private void OnDrawGizmos() {
