@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class Table : MonoBehaviour 
 {
@@ -32,8 +33,9 @@ public class Table : MonoBehaviour
     {
         Customer otherCustomerComponent = other.collider.GetComponent<Customer>();
 
-        if ((IsFree == true) & (OrderInTablesArray == otherCustomerComponent.CurrentTableNumber)) 
+        if (OrderInTablesArray == otherCustomerComponent.CurrentTableNumber) 
         {
+            otherCustomerComponent.StartCoroutine("Stop");
             /* otherCustomerComponent.MakeAnOrder();
             otherCustomerComponent.LeaveRestaurant(); */
         }
