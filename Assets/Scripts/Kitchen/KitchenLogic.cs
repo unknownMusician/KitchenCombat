@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class KitchenLogic : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class KitchenLogic : MonoBehaviour {
     public RectTransform UIMenu { get; set; } = default;
 
     [SerializeField] protected Main main = default; // todo: unused
+    [SerializeField] protected InputManager inputManager = default;
     [SerializeField] protected ComboManager combo = default;
     [SerializeField] public Relations relations = default;
     [SerializeField] protected OrderManager orderManager = default;
@@ -26,18 +28,21 @@ public class KitchenLogic : MonoBehaviour {
         #region Constructor & k
 
         protected KitchenLogic k;
-        public void Start(KitchenLogic k) { this.k = k; }
+        public void Start(KitchenLogic k) {
+            this.k = k;
+            k.inputManager.OnSwipe += Add;
+        }
         #endregion
 
-        protected List<GameLogic.SwipeType> currentCombo = new List<GameLogic.SwipeType>();
-        public void Add(GameLogic.SwipeType swipe) {
+        protected List<Swipe> currentCombo = new List<Swipe>();
+        public void Add(Swipe swipe) {
             currentCombo.Add(swipe);
             if (currentCombo.Count == 3) {
                 OnComboFin(currentCombo);
                 currentCombo.Clear();
             }
         }
-        protected void OnComboFin(List<GameLogic.SwipeType> swipes) {
+        protected void OnComboFin(List<Swipe> swipes) {
             Debug.Log($"KIYYYAA: {swipes[0]} {swipes[1]} {swipes[2]}");
             k.dishCreator.AddIngredient(swipes);
         }
@@ -128,11 +133,11 @@ public class KitchenLogic : MonoBehaviour {
         [SerializeField] protected Vector2 dishPos = default;
         [SerializeField] protected float gap = default;
 
-        protected Dish actualDish = default;
+        protected DishBuilder actualDish = default;
 
-        public void AddIngredient(List<GameLogic.SwipeType> swipes) {
+        public void AddIngredient(List<Swipe> swipes) {
             if(actualDish == null) {
-                actualDish = Dish.Create();
+                actualDish = DishBuilder.Create();
                 actualDish.transform.position = dishPos;
             }
 
@@ -146,20 +151,91 @@ public class KitchenLogic : MonoBehaviour {
         public void OnDrawGizmos() {
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(dishPos, Vector3.one);
-            // todo: Gizmos
         }
     }
+    [System.Serializable] public class InputManager {
+        #region Constructor & k
+
+        protected KitchenLogic k;
+        public void Start(KitchenLogic k) {
+            this.k = k;
+            UI.instance.OnViewChange += CheckView;
+            coroutine = k.StartCoroutine(WaitForPress());
+        }
+        #endregion
+
+        public UnityAction<Swipe> OnSwipe = default;
+        public UnityAction OnTap = default;
+
+        protected Coroutine coroutine = default;
+        protected Vector2 mouseDownPos = default;
+        protected float mouseDownTime = default;
+
+        public void CheckView(bool isKitchen) {
+            if (isKitchen) {
+                if (coroutine == null) { coroutine = k.StartCoroutine(WaitForPress()); }
+            } else {
+                if (coroutine != null) {
+                    k.StopCoroutine(coroutine);
+                    coroutine = null;
+                }
+            }
+        }
+        public IEnumerator WaitForPress() {
+            while (true) {
+                if (Input.GetMouseButtonDown(0)) {
+                    mouseDownPos = Input.mousePosition;
+                    mouseDownTime = Time.time;
+                    coroutine = k.StartCoroutine(WaitForRelease());
+                    break;
+                }
+                yield return null;
+            }
+        }
+        public IEnumerator WaitForRelease() {
+            while (true) {
+                if (Input.GetMouseButtonUp(0)) {
+                    var localDir = (Vector2)Input.mousePosition - mouseDownPos;
+                    if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30) {
+                        OnTap?.Invoke();
+                    } else {
+                        DoSwipe(localDir);
+                    }
+                    coroutine = k.StartCoroutine(WaitForPress());
+                    break;
+                }
+                yield return null;
+            }
+        }
+
+        protected void DoSwipe(Vector2 direction) { // todo: make swipes only work when in Kitchen
+            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y)) {
+                if (direction.x == 0)
+                    return;
+                else if (direction.x > 0)
+                    OnSwipe?.Invoke(Swipe.Right);
+                else
+                    OnSwipe?.Invoke(Swipe.Left);
+            } else {
+                if (direction.y == 0)
+                    return;
+                else if (direction.y > 0)
+                    OnSwipe?.Invoke(Swipe.Up);
+                else
+                    OnSwipe?.Invoke(Swipe.Down);
+            }
+        }
+    }
+    public enum Swipe { Up, Down, Left, Right }
 
     #region Mono
 
     protected void Awake() {
         main.Start(this);
+        inputManager.Start(this);
         combo.Start(this);
         relations.Start(this);
         orderManager.Start(this);
-    }
-    protected void OnEnable() {
-        GameLogic.L.OnSwipe += combo.Add;
     }
     #endregion
 

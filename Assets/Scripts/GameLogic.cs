@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameLogic : MonoBehaviour {
 
@@ -31,12 +28,6 @@ public class GameLogic : MonoBehaviour {
     public static KitchenLogic Kitchen { get; protected set; }
     public static RestaurantLogic Restaurant { get; protected set; }
 
-    public Action<SwipeType> OnSwipe;
-    public Action OnTap;
-
-    protected Vector2 mouseDownPos;
-    protected float mouseDownTime;
-
     protected void Awake() {
         L = this;
         Kitchen = GetComponent<KitchenLogic>();
@@ -46,38 +37,10 @@ public class GameLogic : MonoBehaviour {
         Restaurant.GameMenu = restaurantGameMenu;
         Restaurant.UIMenu = restaurantUIMenu;
     }
-    protected void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            mouseDownPos = Input.mousePosition;
-            mouseDownTime = Time.time;
-        }
-        if (Input.GetMouseButtonUp(0)) {
-            var localDir = (Vector2)Input.mousePosition - mouseDownPos;
-            if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30) { OnTap?.Invoke(); } 
-            else { Swipe(localDir); } // todo: Даня, вот твой свайп - localDir;
-        }
-    }
-    protected void Swipe(Vector2 direction) { // todo: make swipes only work when in Kitchen
-        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y)) {
-            if (direction.x == 0)
-                return;
-            else if (direction.x > 0)
-                OnSwipe?.Invoke(SwipeType.Right);
-            else
-                OnSwipe?.Invoke(SwipeType.Left);
-        } else {
-            if (direction.y == 0)
-                return;
-            else if (direction.y > 0)
-                OnSwipe?.Invoke(SwipeType.Up);
-            else
-                OnSwipe?.Invoke(SwipeType.Down);
-        }
-    }
-    public enum SwipeType { Up, Down, Left, Right }
     public static class Prefabs {
         public readonly static GameObject order = Resources.Load<GameObject>("Prefabs/Order");
         public readonly static GameObject dish = Resources.Load<GameObject>("Prefabs/Dish");
+        public readonly static GameObject dishBuilder = Resources.Load<GameObject>("Prefabs/DishBuilder");
         public readonly static GameObject customer = Resources.Load<GameObject>("Prefabs/Customer");
     }
     public static class Sprites {

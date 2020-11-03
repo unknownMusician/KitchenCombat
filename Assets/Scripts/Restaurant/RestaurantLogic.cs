@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RestaurantLogic : MonoBehaviour 
 {
@@ -10,9 +11,10 @@ public class RestaurantLogic : MonoBehaviour
     private Vector2 mouseDownPos;
     private float mouseDownTime;
 
-    private Dish dish;
+    private Dish dish = default;
 
     public InspectorValues inspectorValues = new InspectorValues();
+    public InputManager inputManager = default;
     [System.Serializable] public class InspectorValues 
     {
         [Header("Menus")]
@@ -30,36 +32,77 @@ public class RestaurantLogic : MonoBehaviour
 
     void Start() 
     {
+        inputManager = new InputManager(this);
         StartCoroutine(CustomerSpawning());
         dish = Instantiate(
-            GameLogic.Prefabs.dish,
-            inspectorValues.dishPoint.position,
-            Quaternion.identity,
+            GameLogic.Prefabs.dish, 
+            inspectorValues.dishPoint.position, 
+            Quaternion.identity, 
             inspectorValues.dishesMenu
             ).GetComponent<Dish>();
-
+        // todo
+        inputManager.OnSwipe += (dir) => {
+            dish.RigidbodyComponent.AddForce(dir);
+            print(dir);
+        };
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            mouseDownPos = Input.mousePosition;
-            mouseDownTime = Time.time;
+    //////// // that is so Restaurant swipes do not collide with Kitchen Swipes
+    //////// // also to remove Update() method
+    public class InputManager {
+        protected RestaurantLogic r;
+        public InputManager(RestaurantLogic r) {
+            this.r = r;
+            UI.instance.OnViewChange += CheckView;
+            coroutine = null;
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            var localDir = (Vector2)Input.mousePosition - mouseDownPos;
-            if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30)
-            {
-                return;
+
+        public UnityAction<Vector2> OnSwipe = default;
+        public UnityAction OnTap = default;
+
+        protected Coroutine coroutine = default;
+        protected Vector2 mouseDownPos = default;
+        protected float mouseDownTime = default;
+
+        public void CheckView(bool isKitchen) {
+            if (!isKitchen) {
+                if (coroutine == null) { coroutine = r.StartCoroutine(WaitForPress()); }
+            } else {
+                if (coroutine != null) {
+                    r.StopCoroutine(coroutine);
+                    coroutine = null;
+                }
             }
-            else
-            {
-                dish.RigidbodyComponent.AddForce(localDir);
+        }
+        public IEnumerator WaitForPress() {
+            while (true) {
+                if (Input.GetMouseButtonDown(0)) {
+                    mouseDownPos = Input.mousePosition;
+                    mouseDownTime = Time.time;
+                    coroutine = r.StartCoroutine(WaitForRelease());
+                    break;
+                }
+                yield return null;
+            }
+        }
+        public IEnumerator WaitForRelease() {
+            while (true) {
+                if (Input.GetMouseButtonUp(0)) {
+                    var localDir = (Vector2)Input.mousePosition - mouseDownPos;
+                    if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30) {
+                        OnTap?.Invoke();
+                    } else {
+                        OnSwipe?.Invoke(localDir);
+                    }
+                    coroutine = r.StartCoroutine(WaitForPress());
+                    break;
+                }
+                yield return null;
             }
         }
     }
+    //////// 
+    //////// 
 
     private IEnumerator CustomerSpawning() 
     {
