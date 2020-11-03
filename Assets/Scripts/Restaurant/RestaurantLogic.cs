@@ -15,14 +15,17 @@ public class RestaurantLogic : MonoBehaviour
     public InspectorValues inspectorValues = new InspectorValues();
     [System.Serializable] public class InspectorValues 
     {
+        [Header("Menus")]
         public Transform customersArrayMenu;
         public Transform tablesArrayMenu;
         public Transform restaurantMenu;
         public Transform dishesMenu;
-
+        
+        [Header("Points")]
         public Transform startPoint;
         public Transform exitPoint;
         public Transform waitPoint;
+        public Transform dishPoint;
     }
 
     void Start() 
@@ -30,7 +33,7 @@ public class RestaurantLogic : MonoBehaviour
         StartCoroutine(CustomerSpawning());
         dish = Instantiate(
             GameLogic.Prefabs.dish,
-            new Vector2(-3.25f, -7f),
+            inspectorValues.dishPoint.position,
             Quaternion.identity,
             inspectorValues.dishesMenu
             ).GetComponent<Dish>();
@@ -53,7 +56,7 @@ public class RestaurantLogic : MonoBehaviour
             }
             else
             {
-                dish.rigidbodyComponent.AddForce(localDir);
+                dish.RigidbodyComponent.AddForce(localDir);
             }
         }
     }

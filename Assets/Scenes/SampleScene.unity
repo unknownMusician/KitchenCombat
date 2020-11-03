@@ -358,6 +358,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 354835899}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &279526003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 279526004}
+  m_Layer: 0
+  m_Name: Dishes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &279526004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279526003}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 943975342}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &306342025
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +526,7 @@ Transform:
   - {fileID: 576913599}
   - {fileID: 1931252682}
   m_Father: {fileID: 943975342}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &404329394
 GameObject:
@@ -996,6 +1026,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1553309932}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &728151165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 728151166}
+  m_Layer: 0
+  m_Name: DishPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &728151166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728151165}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.75, y: -7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 795499971}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &795499970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,6 +1086,7 @@ Transform:
   - {fileID: 1419705095}
   - {fileID: 932002959}
   - {fileID: 1053060994}
+  - {fileID: 728151166}
   m_Father: {fileID: 306342026}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1229,6 +1290,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 279526004}
   - {fileID: 372277067}
   - {fileID: 1086635791}
   - {fileID: 143780898}
@@ -1315,7 +1377,7 @@ Transform:
   - {fileID: 1854808880}
   - {fileID: 1988771069}
   m_Father: {fileID: 943975342}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1839735485 &1086635792
 Tilemap:
@@ -2056,11 +2118,11 @@ MonoBehaviour:
     customersArrayMenu: {fileID: 152820451}
     tablesArrayMenu: {fileID: 1086635791}
     restaurantMenu: {fileID: 306342026}
+    dishesMenu: {fileID: 279526004}
     startPoint: {fileID: 1419705095}
     exitPoint: {fileID: 932002959}
     waitPoint: {fileID: 1053060994}
-    customerPrefab: {fileID: 982415998740163180, guid: 7ab8f473b04fbab479dee145f6c69dc5,
-      type: 3}
+    dishPoint: {fileID: 728151166}
   delayCoefficient: 0.018
 --- !u!114 &1438849498
 MonoBehaviour:
@@ -3197,7 +3259,7 @@ PrefabInstance:
     - target: {fileID: 6991945324861027258, guid: 2f157b5389fb76c4a8a181b0f8f1db86,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6991945324861027258, guid: 2f157b5389fb76c4a8a181b0f8f1db86,
         type: 3}

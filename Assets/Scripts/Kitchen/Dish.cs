@@ -6,13 +6,17 @@ public class Dish : MonoBehaviour
 {
     public List<Ingredient> ingredients = new List<Ingredient>();
 
-    public Rigidbody2D rigidbodyComponent;
+    public Rigidbody2D RigidbodyComponent { get; set; }
 
     protected Dish() { }
     public static Dish Create() {
         var dish = Instantiate(GameLogic.Prefabs.dish).GetComponent<Dish>();
-        dish.rigidbodyComponent = dish.GetComponent<Rigidbody2D>();
         return dish;
+    }
+
+    void Awake()
+    {
+        RigidbodyComponent = GetComponent<Rigidbody2D>();
     }
 
     public void AddIngredient(Ingredient ingredient, float gap) {
