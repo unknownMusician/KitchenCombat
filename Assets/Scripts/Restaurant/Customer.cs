@@ -29,7 +29,6 @@ public class Customer : MonoBehaviour
 
             Transform waitPoint = restaurantLogic.inspectorValues.waitPoint;
             agentComponent.SetDestination(new Vector2(waitPoint.position.x + (amountOfCustomers - amountOfTables - 1) * 0.8f, waitPoint.position.y));
-            Debug.Log(waitPoint.position.x + (amountOfCustomers - amountOfTables - 1) * 0.8f);
         }
     }
 
