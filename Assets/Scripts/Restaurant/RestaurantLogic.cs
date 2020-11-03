@@ -90,9 +90,10 @@ public class RestaurantLogic : MonoBehaviour
 
         if (freeTablesIndexes.Count != 0)
         {
-            return Random.Range(0, freeTablesIndexes.Count);
+            return freeTablesIndexes[Random.Range(0, freeTablesIndexes.Count)];
         }
 
         return -1;
+
     }
 }

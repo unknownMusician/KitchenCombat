@@ -45,8 +45,8 @@ public class Customer : MonoBehaviour
 
     public IEnumerator Stop()
     {
-        yield return new WaitForSeconds(0.5f);
-        agentComponent.isStopped = true;
+        yield return new WaitForSeconds(0.75f);
+        agentComponent.stoppingDistance = 0.25f;
     }
 
     public void MakeAnOrder()
