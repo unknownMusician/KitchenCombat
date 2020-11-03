@@ -6,13 +6,17 @@ public class Dish : MonoBehaviour
 {
     public List<Ingredient> ingredients = new List<Ingredient>();
 
-    public Rigidbody2D rigidbodyComponent;
+    public Rigidbody2D RigidbodyComponent { get; set; }
 
     protected Dish() { }
     public static Dish Create() {
         var dish = Instantiate(GameLogic.Prefabs.dish).GetComponent<Dish>();
-        dish.rigidbodyComponent = dish.GetComponent<Rigidbody2D>();
         return dish;
+    }
+
+    void Awake()
+    {
+        RigidbodyComponent = GetComponent<Rigidbody2D>();
     }
 
     public void AddIngredient(Ingredient ingredient, float gap) {
@@ -34,5 +38,10 @@ public class Dish : MonoBehaviour
         // todo: spawn
         // todo: add a rule so you can only start with bread
         // todo: show or do nt show a shadow
+    }
+
+    public void Land()
+    {
+        Physics2D.OverlapCircleAll(transform.position, 1, );
     }
 }
