@@ -65,14 +65,14 @@ public class KitchenLogic : MonoBehaviour {
         }
         #endregion
 
-        [SerializeField] private Transform orderMenu = default;
-        [SerializeField] private GameObject orderPrefab = default;
-        [SerializeField] private Vector2 spawnPos = default;
-        [SerializeField] private Vector2 endPos = default;
-        [SerializeField] private float moveSpeed = default;
-        [SerializeField] private float gap = default;
+        [SerializeField] protected Transform orderMenu = default;
+        [SerializeField] protected GameObject orderPrefab = default;
+        [SerializeField] protected Vector2 spawnPos = default;
+        [SerializeField] protected Vector2 endPos = default;
+        [SerializeField] protected float moveSpeed = default;
+        [SerializeField] protected float gap = default;
 
-        private List<OrderHolder> orderHolders = new List<OrderHolder>();
+        protected List<OrderHolder> orderHolders = new List<OrderHolder>();
 
         public void AddOrder(Order order) {
             // todo: check if there is place
@@ -86,7 +86,7 @@ public class KitchenLogic : MonoBehaviour {
             // todo: spawn
         }
 
-        private IEnumerator MoveOrder(OrderHolder holder) {
+        protected IEnumerator MoveOrder(OrderHolder holder) {
             var orderTransform = holder.order.transform;
             while (orderTransform.position.x > endPos.x + gap * holder.id) {
                 orderTransform.position += (Vector3)Vector2.left * moveSpeed / 100;
@@ -167,7 +167,7 @@ public class KitchenLogic : MonoBehaviour {
         relations.ReceiveOrder(Order.Create(Recipe.GenerateRecipe(), 1.00f, 10, 1));
     }
 
-    private void OnDrawGizmos() {
+    protected void OnDrawGizmos() {
         orderManager.OnDrawGizmos();
         dishCreator.OnDrawGizmos();
     }

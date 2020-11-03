@@ -6,7 +6,7 @@ public class Dish : MonoBehaviour
 {
     public List<Ingredient> ingredients = new List<Ingredient>();
 
-    private Dish() { }
+    protected Dish() { }
     public static Dish Create() {
         var dish = Instantiate(GameLogic.Prefabs.dish).GetComponent<Dish>();
         return dish;

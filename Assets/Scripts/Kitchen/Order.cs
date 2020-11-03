@@ -8,7 +8,7 @@ public class Order : MonoBehaviour {
     public float timeToExpire = default;
     public int tableId = default;
 
-    private Order() { }
+    protected Order() { }
     public static Order Create(Recipe recipe, float price, float timeToExpire, int tableId) {
         var order = Instantiate(GameLogic.Prefabs.order).GetComponent<Order>();
         order.recipe = recipe;
