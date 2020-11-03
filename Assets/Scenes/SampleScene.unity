@@ -2061,7 +2061,7 @@ MonoBehaviour:
     waitPoint: {fileID: 1053060994}
     customerPrefab: {fileID: 982415998740163180, guid: 7ab8f473b04fbab479dee145f6c69dc5,
       type: 3}
-  delayCoefficient: 0.04
+  delayCoefficient: 0.018
 --- !u!114 &1438849498
 MonoBehaviour:
   m_ObjectHideFlags: 0
