@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Threading;
 
 public class Table : MonoBehaviour 
 {
-    public bool IsFree { get; set; }
-    private Transform transformComponent;
     private RestaurantLogic restaurant;
+    private Transform transformComponent;
+
+    public bool IsFree { get; set; }
     private int OrderInTablesArray { get; set; }
 
     void Awake()
@@ -17,7 +17,7 @@ public class Table : MonoBehaviour
     void Start()
     {
         restaurant = GameLogic.Restaurant;
-        Transform tablesArray = restaurant.TablesArray;
+        Transform tablesArray = restaurant.inspectorValues.tablesArrayMenu;
 
         for (int i = 0; i < tablesArray.childCount; i++)
         {
