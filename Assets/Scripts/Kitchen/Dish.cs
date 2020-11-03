@@ -39,4 +39,9 @@ public class Dish : MonoBehaviour
         // todo: add a rule so you can only start with bread
         // todo: show or do nt show a shadow
     }
+
+    public void Land()
+    {
+        Physics2D.OverlapCircleAll(transform.position, 1, );
+    }
 }
