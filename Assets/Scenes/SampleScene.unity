@@ -2052,13 +2052,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectorValues:
-    customersArrayMenu: {fileID: 0}
-    tablesArrayMenu: {fileID: 0}
-    restaurantMenu: {fileID: 0}
-    startPoint: {fileID: 0}
-    exitPoint: {fileID: 0}
-    waitPoint: {fileID: 0}
-    customerPrefab: {fileID: 0}
+    customersArrayMenu: {fileID: 152820451}
+    tablesArrayMenu: {fileID: 1086635791}
+    restaurantMenu: {fileID: 306342026}
+    startPoint: {fileID: 1419705095}
+    exitPoint: {fileID: 932002959}
+    waitPoint: {fileID: 1053060994}
+    customerPrefab: {fileID: 982415998740163180, guid: 7ab8f473b04fbab479dee145f6c69dc5,
+      type: 3}
   delayCoefficient: 0.018518519
 --- !u!114 &1438849498
 MonoBehaviour:
