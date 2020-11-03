@@ -77,4 +77,10 @@ public class GameLogic : MonoBehaviour {
         }
     }
     public enum SwipeType { Up, Down, Left, Right }
+    public class Prefabs {
+        public readonly static GameObject order = Resources.Load<GameObject>("Prefabs/Order");
+    }
+    public class Constants {
+        public readonly static float SCREEN_WORLD_WIDTH = 9;
+    }
 }
