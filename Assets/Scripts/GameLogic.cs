@@ -57,7 +57,7 @@ public class GameLogic : MonoBehaviour {
             else { Swipe(localDir); } // todo: Даня, вот твой свайп - localDir;
         }
     }
-    protected void Swipe(Vector2 direction) {
+    protected void Swipe(Vector2 direction) { // todo: make swipes only work when in Kitchen
         if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y)) {
             if (direction.x == 0)
                 return;
