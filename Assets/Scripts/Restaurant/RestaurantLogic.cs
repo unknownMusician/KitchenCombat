@@ -5,21 +5,19 @@ public class RestaurantLogic : MonoBehaviour
 {
     public Transform GameMenu { get; set; } = default;
     public RectTransform UIMenu { get; set; } = default;
-    public Transform restaurantMenu;
-    public Transform TablesArray { get; set; }
 
-    [SerializeField] private InspectorValues inspectorValues = new InspectorValues();
-    [System.Serializable] public class InspectorValues {
-        public Transform TablesArray;
-        public Transform menu123;
-        public GameObject prefab1;
-        public GameObject prefab2;
-        public GameObject prefab3;
-    }
-
-    void Awake()
+    public InspectorValues inspectorValues = new InspectorValues();
+    [System.Serializable] public class InspectorValues 
     {
-        TablesArray = restaurantMenu.GetChild(1).GetChild(1);
+        public Transform customersArrayMenu;
+        public Transform tablesArrayMenu;
+        public Transform restaurantMenu;
+        
+        public Transform startPoint;
+        public Transform exitPoint;
+        public Transform waitPoint;
+
+        public GameObject customerPrefab;
     }
 
     void Start() 
@@ -44,7 +42,7 @@ public class RestaurantLogic : MonoBehaviour
 
         // todo: Придумать формулу для рассчёта задержки (с учётом количества столов и количества рецептов/ингридиентов в наличии)
 
-        int amountOfTables = TablesArray.childCount;
+        int amountOfTables = inspectorValues.tablesArrayMenu.childCount;
         int amountOfRecipes = 3;
 
         float result = 1 / (delayCoefficient * (amountOfTables + amountOfRecipes));
@@ -52,24 +50,22 @@ public class RestaurantLogic : MonoBehaviour
         return result;
     }
 
-    [SerializeField] private GameObject customerPrefab;
     public void SpawnCustomer() 
     {
-        Instantiate(customerPrefab,
-            restaurantMenu.GetChild(2).GetChild(0).position,
+        Instantiate(inspectorValues.customerPrefab,
+            inspectorValues.startPoint.position,
             Quaternion.identity,
-            restaurantMenu.GetChild(0)
+            inspectorValues.customersArrayMenu
             );
     }
 
     public bool AreThereFreeTables()
     {
-        Transform tablesArrayMenu = restaurantMenu.GetChild(1).GetChild(1);
-        int tablesArrayLength = restaurantMenu.GetChild(1).GetChild(1).childCount;
+        int tablesArrayLength = inspectorValues.tablesArrayMenu.childCount;
 
         for (int i = 0; i < tablesArrayLength; i++)
         {
-            if (tablesArrayMenu.GetChild(i).GetComponent<Table>().IsFree)
+            if (inspectorValues.tablesArrayMenu.GetChild(i).GetComponent<Table>().IsFree)
             {
                 return true;
             }
@@ -80,16 +76,15 @@ public class RestaurantLogic : MonoBehaviour
 
     public int GetRandomFreeTableNumber()
     {
-        Transform tablesArrayMenu = restaurantMenu.GetChild(1).GetChild(1);
-        int tablesArrayLength = restaurantMenu.GetChild(1).GetChild(1).childCount;
+        int tablesArrayLength = inspectorValues.tablesArrayMenu.childCount;
 
         int randomNumber = Random.Range(0, tablesArrayLength);
-        Table randomTable = tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
+        Table randomTable = inspectorValues.tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
 
         while(randomTable.IsFree == false)
         {
             randomNumber = Random.Range(0, tablesArrayLength);
-            randomTable = tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
+            randomTable = inspectorValues.tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
         }
 
         return randomNumber;

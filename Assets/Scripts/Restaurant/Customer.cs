@@ -4,13 +4,11 @@ using UnityEngine.AI;
 public class Customer : MonoBehaviour 
 {
     private RestaurantLogic restaurantLogic;
-    private Transform restaurantMenu;
     private NavMeshAgent agentComponent;
 
     void Awake() 
     {
         restaurantLogic = GameLogic.Restaurant;
-        restaurantMenu = restaurantLogic.restaurantMenu;
         agentComponent = GetComponent<NavMeshAgent>();
     }
 
@@ -25,7 +23,7 @@ public class Customer : MonoBehaviour
         }
         else
         {
-            Transform waitPoint = restaurantMenu.GetChild(2).GetChild(2);
+            Transform waitPoint = restaurantLogic.inspectorValues.waitPoint;
             agentComponent.SetDestination(waitPoint.position);
         }
     }
@@ -33,7 +31,7 @@ public class Customer : MonoBehaviour
     public int CurrentTableNumber { get; set; }
     void GoToTable(int tableNumber) 
     {
-        Transform currentTable = restaurantMenu.GetChild(1).GetChild(1).GetChild(tableNumber);
+        Transform currentTable = restaurantLogic.inspectorValues.tablesArrayMenu.GetChild(tableNumber);
         CurrentTableNumber = tableNumber;
 
         currentTable.GetComponent<Table>().IsFree = false;
@@ -44,13 +42,13 @@ public class Customer : MonoBehaviour
     {
         Debug.Log("Я сделал заказ!");
         // GameLogic.Kitchen.restaurant.ReceiveOrder(new Order(...)) // todo: связь
-
     }
 
     public void LeaveRestaurant()
     {
-        agentComponent.SetDestination(restaurantMenu.GetChild(2).GetChild(1).position);
-        restaurantMenu.GetChild(1).GetChild(1).GetChild(CurrentTableNumber).GetComponent<Table>().IsFree = true;
+        agentComponent.SetDestination(restaurantLogic.inspectorValues.exitPoint.position);
+        Table usedTable = restaurantLogic.inspectorValues.tablesArrayMenu.GetChild(CurrentTableNumber).GetComponent<Table>();
+        usedTable.IsFree = true;
         CurrentTableNumber = -1;
     }
 }

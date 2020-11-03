@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Order : MonoBehaviour {
-    public Dish dish = default;
+    public Recipe recipe = default;
     public float timeToExpire = default;
     public int tableId = default;
 
-    public Order(Dish dish, float timeToExpire, int tableId) {
-        this.dish = dish;
+    public Order(Recipe recipe, float timeToExpire, int tableId) {
+        this.recipe = recipe;
         this.timeToExpire = timeToExpire;
         this.tableId = tableId;
     }
 
-    public class Dish {
+    public class Recipe {
         public List<Ingredient> ingredients;
         public float price;
 
-        public Dish(List<Ingredient> ingredients, float price) {
+        public Recipe(List<Ingredient> ingredients, float price) {
             this.ingredients = ingredients;
             this.price = price;
         }
 
-        public static Dish GenerateDish() {
+        public static Recipe GenerateRecipe() {
             // todo: generating algorythm
             var ingrs = new List<Ingredient>();
             float price = 0;
@@ -33,7 +33,7 @@ public class Order : MonoBehaviour {
             }else if (...) {
                 // todo
             }*/
-            return new Dish(ingrs, price);
+            return new Recipe(ingrs, price);
         }
     }
 
