@@ -10,7 +10,7 @@ public class RestaurantLogic : MonoBehaviour
     private Vector2 mouseDownPos;
     private float mouseDownTime;
 
-    private GameObject dish;
+    private Dish dish;
 
     public InspectorValues inspectorValues = new InspectorValues();
     [System.Serializable] public class InspectorValues 
@@ -28,11 +28,13 @@ public class RestaurantLogic : MonoBehaviour
     void Start() 
     {
         StartCoroutine(CustomerSpawning());
-        dish = Instantiate(GameLogic.Prefabs.dish,
+        dish = Instantiate(
+            GameLogic.Prefabs.dish,
             new Vector2(-3.25f, -7f),
             Quaternion.identity,
             inspectorValues.dishesMenu
-            );
+            ).GetComponent<Dish>();
+
     }
 
     void Update()
