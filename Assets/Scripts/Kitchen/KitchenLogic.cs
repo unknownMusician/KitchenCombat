@@ -164,7 +164,7 @@ public class KitchenLogic : MonoBehaviour {
     #endregion
 
     public void TEST() { // todo: TEST
-        orderManager.AddOrder(Order.Create(Recipe.GenerateRecipe(), 10, 1));
+        relations.ReceiveOrder(Order.Create(Recipe.GenerateRecipe(), 10, 1));
     }
 
     private void OnDrawGizmos() {

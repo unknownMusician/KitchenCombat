@@ -2079,9 +2079,12 @@ MonoBehaviour:
     orderPrefab: {fileID: 6826362155716894612, guid: 1fb4e381bc60a834f966888d7fe7bcbb,
       type: 3}
     spawnPos: {x: 3.7, y: -7}
-    endPos: {x: -3.7, y: -7}
+    endPos: {x: -3.65, y: -7}
     moveSpeed: 3
     gap: 1.6
+  dishCreator:
+    dishPos: {x: 0, y: -3.7}
+    gap: 0.4
 --- !u!1 &1518823084
 GameObject:
   m_ObjectHideFlags: 0
