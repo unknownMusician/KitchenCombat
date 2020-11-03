@@ -78,6 +78,7 @@ public class GameLogic : MonoBehaviour {
     public static class Prefabs {
         public readonly static GameObject order = Resources.Load<GameObject>("Prefabs/Order");
         public readonly static GameObject dish = Resources.Load<GameObject>("Prefabs/Dish");
+        public readonly static GameObject customer = Resources.Load<GameObject>("Prefabs/Customer");
     }
     public static class Sprites {
         public static class Kitchen {

@@ -7,23 +7,56 @@ public class RestaurantLogic : MonoBehaviour
     public Transform GameMenu { get; set; } = default;
     public RectTransform UIMenu { get; set; } = default;
 
+    private Vector2 mouseDownPos;
+    private float mouseDownTime;
+
+    private Dish dish;
+
     public InspectorValues inspectorValues = new InspectorValues();
     [System.Serializable] public class InspectorValues 
     {
         public Transform customersArrayMenu;
         public Transform tablesArrayMenu;
         public Transform restaurantMenu;
-        
+        public Transform dishesMenu;
+
         public Transform startPoint;
         public Transform exitPoint;
         public Transform waitPoint;
-
-        public GameObject customerPrefab;
     }
 
     void Start() 
     {
         StartCoroutine(CustomerSpawning());
+        dish = Instantiate(
+            GameLogic.Prefabs.dish,
+            new Vector2(-3.25f, -7f),
+            Quaternion.identity,
+            inspectorValues.dishesMenu
+            ).GetComponent<Dish>();
+
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            mouseDownPos = Input.mousePosition;
+            mouseDownTime = Time.time;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            var localDir = (Vector2)Input.mousePosition - mouseDownPos;
+            if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30)
+            {
+                return;
+            }
+            else
+            {
+                dish.rigidbodyComponent.mass = 1;
+                dish.rigidbodyComponent.AddForce(localDir);
+            }
+        }
     }
 
     private IEnumerator CustomerSpawning() 
@@ -53,7 +86,7 @@ public class RestaurantLogic : MonoBehaviour
 
     public void SpawnCustomer() 
     {
-        Instantiate(inspectorValues.customerPrefab,
+        Instantiate(GameLogic.Prefabs.customer,
             inspectorValues.startPoint.position,
             Quaternion.identity,
             inspectorValues.customersArrayMenu
