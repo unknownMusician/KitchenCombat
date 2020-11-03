@@ -8,9 +8,10 @@ public class KitchenLogic : MonoBehaviour {
     public RectTransform UIMenu { get; set; } = default;
 
     public Main main = default; // todo: unused
-    public Combo combo = default;
+    public ComboManager combo = default;
     public Relations relations = default;
     public OrderManager orderManager = default;
+    public DishCreator dishCreator = default;
 
     // todo: unused
     [System.Serializable] public class Main {
@@ -21,7 +22,7 @@ public class KitchenLogic : MonoBehaviour {
         #endregion
 
     }
-    [System.Serializable] public class Combo {
+    [System.Serializable] public class ComboManager {
         #region Constructor & k
 
         protected KitchenLogic k;
@@ -38,7 +39,7 @@ public class KitchenLogic : MonoBehaviour {
         }
         protected void OnComboFin(List<GameLogic.SwipeType> swipes) {
             Debug.Log($"KIYYYAA: {swipes[0]} {swipes[1]} {swipes[2]}");
-            // todo: spawn
+            k.dishCreator.AddIngredient(swipes);
         }
     }
     [System.Serializable] public class Relations {
@@ -115,6 +116,39 @@ public class KitchenLogic : MonoBehaviour {
             }
         }
     }
+    [System.Serializable] public class DishCreator {
+        #region Constructor & k
+
+        protected KitchenLogic k;
+        public void Start(KitchenLogic k) {
+            this.k = k;
+        }
+        #endregion
+
+        [SerializeField] protected Vector2 dishPos = default;
+        [SerializeField] protected float gap = default;
+
+        protected Dish actualDish = default;
+
+        public void AddIngredient(List<GameLogic.SwipeType> swipes) {
+            if(actualDish == null) {
+                actualDish = Dish.Create();
+                actualDish.transform.position = dishPos;
+            }
+
+            var ingredient = Ingredient.GetIngredient(swipes);
+            if(ingredient == null) { return; }
+
+            actualDish.AddIngredient(ingredient, gap);
+            // todo: spawn
+        }
+
+        public void OnDrawGizmos() {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(dishPos, Vector3.one);
+            // todo: Gizmos
+        }
+    }
 
     #region Mono
 
@@ -130,10 +164,11 @@ public class KitchenLogic : MonoBehaviour {
     #endregion
 
     public void TEST() { // todo: TEST
-        orderManager.AddOrder(Order.Create(Order.Recipe.GenerateRecipe(), 10, 1));
+        orderManager.AddOrder(Order.Create(Recipe.GenerateRecipe(), 10, 1));
     }
 
     private void OnDrawGizmos() {
         orderManager.OnDrawGizmos();
+        dishCreator.OnDrawGizmos();
     }
 }

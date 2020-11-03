@@ -34,7 +34,7 @@ public class RestaurantLogic : MonoBehaviour
         }
     }
 
-    [SerializeField] private float delayCoefficient;
+    [SerializeField] private float delayCoefficient = default;
     private float CalculateDelay() 
     {
         // Метод расчитывает задержку между приходом покупателей

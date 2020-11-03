@@ -77,10 +77,18 @@ public class GameLogic : MonoBehaviour {
         }
     }
     public enum SwipeType { Up, Down, Left, Right }
-    public class Prefabs {
+    public static class Prefabs {
         public readonly static GameObject order = Resources.Load<GameObject>("Prefabs/Order");
+        public readonly static GameObject dish = Resources.Load<GameObject>("Prefabs/Dish");
     }
-    public class Constants {
+    public static class Sprites {
+        public static class Kitchen {
+            public readonly static Sprite breadBottom = Resources.Load<Sprite>("Sprites/Kitchen/BreadBottom");
+            public readonly static Sprite breadTop = Resources.Load<Sprite>("Sprites/Kitchen/BreadTop");
+            public readonly static Sprite meat = Resources.Load<Sprite>("Sprites/Kitchen/Meat");
+        }
+    }
+    public static class Constants {
         public readonly static float SCREEN_WORLD_WIDTH = 9;
     }
 }

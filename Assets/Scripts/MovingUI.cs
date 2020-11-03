@@ -78,6 +78,7 @@ public class MovingUI : MonoBehaviour {
         protected float LerpNormalize1(float l) {
             float x = (-1 + Mathf.Sqrt(5)) / 2;
             return -1 / (l + x) + x + 1;
+            // return Mathf.Pow(l, 1/3f);
         }
     }
     [System.Serializable] public class Restaurant {
