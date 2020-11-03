@@ -7,11 +7,11 @@ public class KitchenLogic : MonoBehaviour {
     public Transform GameMenu { get; set; } = default;
     public RectTransform UIMenu { get; set; } = default;
 
-    public Main main = default; // todo: unused
-    public ComboManager combo = default;
+    protected Main main = default; // todo: unused
+    protected ComboManager combo = default;
     public Relations relations = default;
-    public OrderManager orderManager = default;
-    public DishCreator dishCreator = default;
+    protected OrderManager orderManager = default;
+    protected DishCreator dishCreator = default;
 
     // todo: unused
     [System.Serializable] public class Main {
