@@ -53,7 +53,6 @@ public class RestaurantLogic : MonoBehaviour
             }
             else
             {
-                dish.rigidbodyComponent.mass = 1;
                 dish.rigidbodyComponent.AddForce(localDir);
             }
         }
