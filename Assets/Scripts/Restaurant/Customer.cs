@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class Customer : MonoBehaviour 
@@ -23,8 +24,12 @@ public class Customer : MonoBehaviour
         }
         else
         {
+            int amountOfCustomers = restaurantLogic.inspectorValues.customersArrayMenu.childCount;
+            int amountOfTables = restaurantLogic.inspectorValues.tablesArrayMenu.childCount;
+
             Transform waitPoint = restaurantLogic.inspectorValues.waitPoint;
-            agentComponent.SetDestination(waitPoint.position);
+            agentComponent.SetDestination(new Vector2(waitPoint.position.x + (amountOfCustomers - amountOfTables - 1) * 0.8f, waitPoint.position.y));
+            Debug.Log(waitPoint.position.x + (amountOfCustomers - amountOfTables - 1) * 0.8f);
         }
     }
 
@@ -35,7 +40,14 @@ public class Customer : MonoBehaviour
         CurrentTableNumber = tableNumber;
 
         currentTable.GetComponent<Table>().IsFree = false;
+
         agentComponent.SetDestination(currentTable.position);
+    }
+
+    public IEnumerator Stop()
+    {
+        yield return new WaitForSeconds(0.5f);
+        agentComponent.isStopped = true;
     }
 
     public void MakeAnOrder()
