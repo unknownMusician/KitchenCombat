@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 public class RestaurantLogic : MonoBehaviour 
@@ -77,16 +78,22 @@ public class RestaurantLogic : MonoBehaviour
     public int GetRandomFreeTableNumber()
     {
         int tablesArrayLength = inspectorValues.tablesArrayMenu.childCount;
+        Collection<int> freeTablesIndexes = new Collection<int>();
 
-        int randomNumber = Random.Range(0, tablesArrayLength);
-        Table randomTable = inspectorValues.tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
-
-        while(randomTable.IsFree == false)
+        for (int i = 0; i < tablesArrayLength; i++)
         {
-            randomNumber = Random.Range(0, tablesArrayLength);
-            randomTable = inspectorValues.tablesArrayMenu.GetChild(randomNumber).GetComponent<Table>();
+            if (inspectorValues.tablesArrayMenu.GetChild(i).GetComponent<Table>().IsFree)
+            {
+                freeTablesIndexes.Add(i);
+            }
         }
 
-        return randomNumber;
+        if (freeTablesIndexes.Count != 0)
+        {
+            return freeTablesIndexes[Random.Range(0, freeTablesIndexes.Count)];
+        }
+
+        return -1;
+
     }
 }
