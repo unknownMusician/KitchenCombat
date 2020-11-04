@@ -109,6 +109,10 @@ public class KitchenLogic : MonoBehaviour {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(endPos + Vector2.right * gap, orderPrefab.GetComponent<BoxCollider2D>().size);
         }
+        // todo
+        public bool CheckForOrder(Vector2 worldPosition) {
+            Return true;
+        }
 
         public class OrderHolder {
             public Order order = default;
