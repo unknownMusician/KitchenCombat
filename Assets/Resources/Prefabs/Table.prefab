@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7468078648949225706}
   - component: {fileID: 7468078648949225707}
   - component: {fileID: 7468078648949225708}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Table
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a61767c6ecca6b458f25d982d89fbe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orderInTablesArray: 0
 --- !u!61 &7468078648949225707
 BoxCollider2D:
   m_ObjectHideFlags: 0
