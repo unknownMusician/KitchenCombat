@@ -41,26 +41,35 @@ public class RestaurantLogic : MonoBehaviour
             inspectorValues.dishesMenu
             ).GetComponent<Dish>();
         // todo
-        inputManager.OnSwipe += (dir) => {
-            dish.RigidbodyComponent.AddForce(dir);
-            print(dir);
-        };
+    }
+
+    bool isThrown;
+    void Throw(Vector2 dir) {
+        if (isThrown) { return; }
+        // todo 
+        // dish.RigidbodyComponent.AddForce(dir);
+        isThrown = true;
+    }
+
+    void Drop() {
+        if(!isThrown) { return; }
+        // todo
+        // dish.RigidbodyComponent.velocity = Vector2.zero;
+        // And so on...
+        isThrown = false;
     }
 
     ///
-    //private void OnEnable() {
-    //    inputManager.OnSwipe += SWUPE;
-    //}
+    private void OnEnable() {
+        inputManager.OnSwipe += Throw;
+        inputManager.OnTap += Drop;
+    }
 
-    //private void OnDisable() {
-    //    inputManager.OnSwipe -= SWUPE;
-    //}
+    private void OnDisable() {
+        inputManager.OnSwipe -= Throw; // Ctrl(Down) + K + C + Ctrl(Up) - comment
+        inputManager.OnTap -= Drop; // // Ctrl(Down) + K + U + Ctrl(Up) - UNcomment
+    }
 
-    //void SWUPE(Vector2 dir) { }
-    ///
-
-    //////// // that is so Restaurant swipes do not collide with Kitchen Swipes
-    //////// // also to remove Update() method
     public class InputManager {
         protected RestaurantLogic r;
         public InputManager(RestaurantLogic r) {
@@ -113,8 +122,6 @@ public class RestaurantLogic : MonoBehaviour
             }
         }
     }
-    //////// 
-    //////// 
 
     private IEnumerator CustomerSpawning() 
     {
