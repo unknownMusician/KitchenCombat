@@ -7,10 +7,7 @@ public class DishBuilder : MonoBehaviour {
     public List<Ingredient> ingredients = new List<Ingredient>();
 
     protected DishBuilder() { }
-    public static DishBuilder Create() {
-        var dish = Instantiate(GameLogic.Prefabs.dishBuilder).GetComponent<DishBuilder>();
-        return dish;
-    }
+    public static DishBuilder Create() => Instantiate(GameLogic.Prefabs.dishBuilder).GetComponent<DishBuilder>();
     public void AddIngredient(Ingredient ingredient, float gap) {
         ingredients.Add(ingredient);
         // creating // todo: move to Ingredient.cs

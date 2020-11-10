@@ -47,6 +47,18 @@ public class RestaurantLogic : MonoBehaviour
         };
     }
 
+    ///
+    //private void OnEnable() {
+    //    inputManager.OnSwipe += SWUPE;
+    //}
+
+    //private void OnDisable() {
+    //    inputManager.OnSwipe -= SWUPE;
+    //}
+
+    //void SWUPE(Vector2 dir) { }
+    ///
+
     //////// // that is so Restaurant swipes do not collide with Kitchen Swipes
     //////// // also to remove Update() method
     public class InputManager {
