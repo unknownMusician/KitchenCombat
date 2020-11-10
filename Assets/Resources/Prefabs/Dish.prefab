@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 849069528367920179}
   - component: {fileID: 8426285552044168990}
   - component: {fileID: 6843075584381820945}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,4 +143,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d25842761136ba4eab7869092c1b682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbodyComponent: {fileID: 0}
