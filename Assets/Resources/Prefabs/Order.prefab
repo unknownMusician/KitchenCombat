@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6826362155716894609}
+  - component: {fileID: 6150700833244620865}
   - component: {fileID: 6826362155716894610}
   - component: {fileID: -697892670036822553}
   - component: {fileID: 6826362155716894611}
@@ -20,7 +20,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6826362155716894609
+--- !u!4 &6150700833244620865
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 21
-  m_Sprite: {fileID: 21300000, guid: 261bee8720780d641ab43a4ff4f65518, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 93d295d38ff2c30488a72f0de43d81c3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -117,6 +117,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b0bbb7b3228bf34c8164a0bf656d386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  size: {x: 0, y: 0}
+  price: 0
   timeToExpire: 0
   tableId: 0
 --- !u!61 &7164692520318419016
@@ -134,7 +136,7 @@ BoxCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 0.1, y: 0.1, z: 0.1, w: 0.1}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.7, y: 2}
     newSize: {x: 1.7, y: 2}

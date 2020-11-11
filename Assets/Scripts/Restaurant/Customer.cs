@@ -51,7 +51,7 @@ public class Customer : MonoBehaviour
 
     public void MakeAnOrder()
     {
-        GameLogic.Kitchen.relations.ReceiveOrder(Order.Create(Recipe.GenerateRecipe(), 0, 60, CurrentTableNumber));
+        GameLogic.Kitchen.relations.ReceiveOrder(Order.Create(Recipe.GenerateRecipe(), 60, CurrentTableNumber));
     }
 
     public void LeaveRestaurant()

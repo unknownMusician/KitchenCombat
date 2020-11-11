@@ -16,11 +16,11 @@ public class DishBuilder : MonoBehaviour {
         ingrTransform.SetParent(transform);
         ingrTransform.localPosition = Vector2.up * (transform.childCount - 1) * gap;
         var ingrSR = ingrObject.GetComponent<SpriteRenderer>();
-        ingrSR.sprite = ingredient.sprites[0];
+        ingrSR.sprite = ingredient.Sprites[0];
         ingrSR.sortingOrder = 12 + transform.childCount;
         if (ingredient.name == "Bread") {
             if (transform.childCount > 1) {
-                ingrSR.sprite = ingredient.sprites[1];
+                ingrSR.sprite = ingredient.Sprites[1];
             }
         }
         // todo: check if last ingredient;

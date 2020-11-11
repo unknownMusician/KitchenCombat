@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
-public class UI : MonoBehaviour {
+public sealed class UI : MonoBehaviour {
 
     public static UI instance;
 
@@ -13,9 +13,9 @@ public class UI : MonoBehaviour {
     public Restaurant restaurant = null;
     public Kitchen kitchen = null;
 
-    public UnityAction<bool> OnViewChange = default;
+    public UnityAction<bool> OnViewChange { get; set; } = default; // todo unused
 
-    protected void Awake() {
+    private void Awake() {
         if (instance != null) { return; }
         instance = this;
 
@@ -30,9 +30,9 @@ public class UI : MonoBehaviour {
         protected UI ui = null;
 
         protected bool _kitchenLook = true;
-        protected bool KitchenLook {
+        public bool KitchenLook {
             get => _kitchenLook;
-            set {
+            private set {
                 _kitchenLook = value;
                 ui.OnViewChange?.Invoke(_kitchenLook);
             }
