@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -118,10 +119,10 @@ public sealed class GameLogic : MonoBehaviour {
         }
 
         private static void InvokeNormalizedSwipe(Vector2 direction, UnityAction<Swipe> onSwipe) { // todo: make swipes only work when in Kitchen
-            if(direction.magnitude == 0) { return; }
+            if (direction.magnitude == 0) { return; }
             onSwipe?.Invoke(
-                Mathf.Abs(direction.x) > Mathf.Abs(direction.y) ? 
-                direction.x > 0 ? Swipe.Right : Swipe.Left 
+                Mathf.Abs(direction.x) > Mathf.Abs(direction.y) ?
+                direction.x > 0 ? Swipe.Right : Swipe.Left
                 : direction.y > 0 ? Swipe.Up : Swipe.Down
                 );
         }
@@ -140,30 +141,37 @@ public sealed class GameLogic : MonoBehaviour {
         Restaurant.GameMenu = restaurantGameMenu;
         Restaurant.UIMenu = restaurantUIMenu;
         InputManager.Start(this);
-        Dish.InitializeDishes();
     }
     public static class Prefabs {
-        public readonly static GameObject order = Resources.Load<GameObject>("Prefabs/Order");
-        public readonly static GameObject dish = Resources.Load<GameObject>("Prefabs/Dish");
-        public readonly static GameObject dishBuilder = Resources.Load<GameObject>("Prefabs/DishBuilder");
-        public readonly static GameObject burger = Resources.Load<GameObject>("Prefabs/Burger");
-        public readonly static GameObject customer = Resources.Load<GameObject>("Prefabs/Customer");
-    }
-    public static class Sprites {
         public static class Kitchen {
-            public readonly static Sprite breadBottom = Resources.Load<Sprite>("Sprites/Kitchen/BreadBottom");
-            public readonly static Sprite breadTop = Resources.Load<Sprite>("Sprites/Kitchen/BreadTop");
-            public readonly static Sprite breadIngredientIcon = Resources.LoadAll<Sprite>("Sprites/Kitchen/IngredientIcons")[0];
-            public readonly static Sprite breadIngredientTextIcon = Resources.LoadAll<Sprite>("Sprites/Kitchen/IngredientTextIcons")[0];
-
-            public readonly static Sprite meat = Resources.Load<Sprite>("Sprites/Kitchen/Meat");
-            public readonly static Sprite meatIngredientIcon = Resources.LoadAll<Sprite>("Sprites/Kitchen/IngredientIcons")[1];
-            public readonly static Sprite meatIngredientTextIcon = Resources.LoadAll<Sprite>("Sprites/Kitchen/IngredientTextIcons")[1];
-
-            public readonly static Sprite burger = Resources.Load<Sprite>("Sprites/Kitchen/Burger");
+            private readonly static string path = "Prefabs/Kitchen/";
+            public readonly static GameObject order = Resources.Load<GameObject>($"{path}Order");
+            public readonly static GameObject dishBuilder = Resources.Load<GameObject>($"{path}DishBuilder");
+            public static class Ingredients {
+                private readonly static string path = $"{Kitchen.path}Ingredients/";
+                public static Ingredient bread = Resources.Load<GameObject>($"{path}Bread").GetComponent<Ingredient>();
+                public static Ingredient meat = Resources.Load<GameObject>($"{path}Meat").GetComponent<Ingredient>();
+                public readonly static Ingredient[] All = new[] { bread, meat };
+            }
+        }
+        public static class Restaurant {
+            private readonly static string path = "Prefabs/Restaurant/";
+            public readonly static GameObject dish = Resources.Load<GameObject>($"{path}Dish");
+            public readonly static GameObject customer = Resources.Load<GameObject>($"{path}Customer");
         }
     }
     public static class Constants {
         public readonly static float SCREEN_WORLD_WIDTH = 9;
+    }
+    public static class Service {
+        public static bool CompareLists<T>(List<T> list1, List<T> list2) {
+            if (list1 == null || list2 == null) { return false; }
+            if (list1.Count != list2.Count) { return false; }
+            int size = list1.Count;
+            for (int i = 0; i < size; i++) {
+                if (!list1[i].Equals(list2[i])) { return false; }
+            }
+            return true;
+        }
     }
 }

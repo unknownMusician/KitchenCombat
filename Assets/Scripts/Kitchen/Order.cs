@@ -12,7 +12,7 @@ public class Order : MonoBehaviour {
     protected Order() { }
     public static Order Create(Recipe recipe, float timeToExpire, int tableId) {
         // Creating
-        var order = Instantiate(GameLogic.Prefabs.order).GetComponent<Order>();
+        var order = Instantiate(GameLogic.Prefabs.Kitchen.order).GetComponent<Order>();
         order.Recipe = recipe;
         order.Price = recipe.Price;
         order.TimeToExpire = timeToExpire;
@@ -27,21 +27,16 @@ public class Order : MonoBehaviour {
             GameObject note = new GameObject("OrderNote");
             note.transform.SetParent(order.transform);
             note.transform.localPosition = new Vector2(-0.2f, 0.6f - 0.3f * i);
-            // Filling Order Note
-            GameObject noteIcon = new GameObject("NoteIcon", typeof(SpriteRenderer));
-            GameObject noteText = new GameObject("NoteText", typeof(SpriteRenderer));
-            noteIcon.GetComponent<SpriteRenderer>().sprite = recipe.Ingredients[i].OrderIcon;
-            noteText.GetComponent<SpriteRenderer>().sprite = recipe.Ingredients[i].OrderTextIcon;
-            noteIcon.GetComponent<SpriteRenderer>().sortingOrder = 22;
-            noteText.GetComponent<SpriteRenderer>().sortingOrder = 22;
-            noteIcon.transform.SetParent(note.transform);
-            noteText.transform.SetParent(note.transform);
-            noteIcon.transform.localPosition = Vector2.left * 0.2f;
-            noteText.transform.localPosition = Vector2.right * 0.4f;
+            // Filling Order Note; [0] - Icon; [1] - Text;
+            var noteParts = new[] { new GameObject("NoteIcon", typeof(SpriteRenderer)), new GameObject("NoteText", typeof(SpriteRenderer)) };
+            for(int j = 0; j < noteParts.Length; j++) {
+                noteParts[j].GetComponent<SpriteRenderer>().sprite = j == 0 ? recipe.Ingredients[i].OrderIcon : recipe.Ingredients[i].OrderTextIcon;
+                noteParts[j].GetComponent<SpriteRenderer>().sortingOrder = order.GetComponent<SpriteRenderer>().sortingOrder + 1; // todo: optimize
+                noteParts[j].transform.SetParent(note.transform);
+                noteParts[j].transform.localPosition = j == 0 ? Vector2.left * 0.2f : Vector2.right * 0.4f;
+            }
         }
-        // Return
         return order;
-        // todo: reduce
     }
 
     public OrderData TurnToData() {

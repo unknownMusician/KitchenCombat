@@ -1,19 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using static GameLogic;
 
 /// todo:
-/// - Check order by position of click +
-/// - Move Order with cursor +
-/// - Disable swipes temporarely when controlling +
-/// - Make Ingredient images in order +
-/// - Mouse release check (compare to order)
-/// - if not same - anim back down
-/// - if same - generate dish and remove order from list
-/// - send to Restaurant
-/// - and anim "creating dish"
-/// 
+/// - anim adding ingredient
 /// 
 public sealed class KitchenLogic : MonoBehaviour {
 
@@ -24,12 +16,12 @@ public sealed class KitchenLogic : MonoBehaviour {
     [SerializeField] private ComboManager comboManager = default;
     [SerializeField] public Relations relations = default;
     [SerializeField] private OrderManager orderManager = default;
-    [SerializeField] private DishCreator dishCreator = default;
+    [SerializeField] private DishManager dishManager = default;
     [SerializeField] private MovingManager movingManager = default;
 
     // todo: unused
     [System.Serializable]
-    public sealed class Main {
+    private sealed class Main {
         #region Constructor & k
 
         private KitchenLogic k;
@@ -38,7 +30,7 @@ public sealed class KitchenLogic : MonoBehaviour {
 
     }
     [System.Serializable]
-    public sealed class ComboManager {
+    private sealed class ComboManager {
         #region Constructor & k
 
         private KitchenLogic k;
@@ -64,7 +56,7 @@ public sealed class KitchenLogic : MonoBehaviour {
         }
         private void OnComboFin(List<InputManager.Swipe> swipes) {
             Debug.Log($"KIYYYAA: {swipes[0]} {swipes[1]} {swipes[2]}");
-            k.dishCreator.AddIngredient(swipes);
+            k.dishManager.AddIngredient(swipes);
         }
         public void SkipNext() => skipNext = true;
     }
@@ -84,7 +76,7 @@ public sealed class KitchenLogic : MonoBehaviour {
         }
     }
     [System.Serializable]
-    public sealed class OrderManager {
+    private sealed class OrderManager {
         #region Constructor & k
 
         private KitchenLogic k;
@@ -111,7 +103,6 @@ public sealed class KitchenLogic : MonoBehaviour {
             order.transform.position = spawnPos;
             // start moving
             orderHolder.coroutine = k.StartCoroutine(MoveOrder(orderHolder));
-            // todo: spawn
         }
         public bool RemoveOrder(OrderHolder orderHolder) {
             if (orderHolder == null) { return false; }
@@ -119,7 +110,15 @@ public sealed class KitchenLogic : MonoBehaviour {
                 k.StopCoroutine(orderHolder.coroutine);
                 orderHolder.coroutine = null;
             }
-            return orderHolders.Remove(orderHolder);
+            bool result = orderHolders.Remove(orderHolder);
+            // shift others
+            foreach (var holder in orderHolders) {
+                holder.id = orderHolders.IndexOf(holder);
+                holder.regularPos = Vector2.right * gap * holder.id;
+                holder.coroutine = k.StartCoroutine(MoveOrder(holder));
+            }
+            // 
+            return result;
         }
 
         private IEnumerator MoveOrder(OrderHolder holder) {
@@ -170,7 +169,7 @@ public sealed class KitchenLogic : MonoBehaviour {
         }
     }
     [System.Serializable]
-    public sealed class DishCreator {
+    private sealed class DishManager {
         #region Constructor & k
 
         private KitchenLogic k;
@@ -190,31 +189,37 @@ public sealed class KitchenLogic : MonoBehaviour {
                 actualDish.transform.position = dishPos;
             }
 
-            var ingredient = Ingredient.GetIngredient(swipes);
+            var ingredient = Ingredient.Create(swipes);
             if (ingredient == null) { return; }
 
             actualDish.AddIngredient(ingredient, gap);
-            // todo: spawn
         }
 
         public bool CheckIfCorrect(Order order) {
-            List<Ingredient> list1 = actualDish.ingredients;
-            List<Ingredient> list2 = order.Recipe.Ingredients;
-            int size = list1.Count;
-            if (list1.Count != list2.Count) { return false; }
-            for (int i = 0; i < size; i++) {
-                if (list1[i] != list2[i]) { return false; }
-            }
+            if (actualDish == null) { return false; }
+            if (!Service.CompareLists(actualDish.ingredients, order.Recipe.Ingredients)) { return false; }
+            return true;
+        }
+
+        public void OnDishFin(Order order) {
             // Creating instances for Restaurant
             var finDish = actualDish.Finalize();
             var orderData = order.TurnToData();
             // Fin corrections
-            Destroy(actualDish.gameObject);
             actualDish = null;
-            // Send to Restaurant
-            Restaurant.RecieveDish(finDish, orderData);
             // todo anim;
-            return true;
+            k.StartCoroutine(DishFinalization(finDish.transform, 1,
+                () => Restaurant.RecieveDish(finDish, orderData) // Send to Restaurant
+                ));
+        }
+
+        private IEnumerator DishFinalization(Transform movable, float t, UnityAction end = null) {
+            yield return k.StartCoroutine(Lerps.RotateLerp(movable, 180, t / 5.0f));
+            yield return k.StartCoroutine(Lerps.RotateLerp(movable, 360, t / 5.0f));
+            yield return new WaitForSeconds(2 * t / 5.0f);
+            yield return k.StartCoroutine(Lerps.MoveLerp(movable, Vector2.right * Constants.SCREEN_WORLD_WIDTH, t / 5.0f));
+            // todo
+            end?.Invoke();
         }
 
         public void OnDrawGizmos() {
@@ -229,14 +234,14 @@ public sealed class KitchenLogic : MonoBehaviour {
         private KitchenLogic k;
         public void Start(KitchenLogic k) {
             this.k = k;
-            InputManager.Actions.Kitchen.OnPress += CheckOrderClick;
+            InputManager.Actions.Kitchen.OnPress += CheckOrderPress;
             InputManager.Actions.Kitchen.OnRelease += CheckOrderRelease;
         }
         #endregion
 
         private OrderManager.OrderHolder controlledOrderHolder = null;
 
-        private void CheckOrderClick(Vector2 mouseWorldPosition) {
+        private void CheckOrderPress(Vector2 mouseWorldPosition) {
             var orderHolder = k.orderManager.GetOrder(mouseWorldPosition);
             if (orderHolder == null) { return; }
 
@@ -248,19 +253,22 @@ public sealed class KitchenLogic : MonoBehaviour {
             }
             orderHolder.coroutine = k.StartCoroutine(ControllOrder(orderHolder.order));
         }
-
         private void CheckOrderRelease(Vector2 mouseWorldPosition) {
             if (controlledOrderHolder != null) {
                 k.StopCoroutine(controlledOrderHolder.coroutine);
                 controlledOrderHolder.coroutine = null;
-                // if dish created correctly
-                if (k.dishCreator.CheckIfCorrect(controlledOrderHolder.order)) {
+                // If dish created correctly
+                var order = controlledOrderHolder.order;
+                if (k.dishManager.CheckIfCorrect(order)) {
                     k.orderManager.RemoveOrder(controlledOrderHolder);
                     controlledOrderHolder = null;
+                    k.dishManager.OnDishFin(order);
                     return;
                 }
-                controlledOrderHolder.order.transform.position = controlledOrderHolder.regularPos;
-                // todo: or start the animation instead
+                // If not
+                controlledOrderHolder.coroutine = k.StartCoroutine(
+                    Lerps.MoveLerp(controlledOrderHolder.order.transform, controlledOrderHolder.regularPos, 0.2f, Lerps.Normalizators.Squared)
+                    );
                 controlledOrderHolder = null;
             }
         }
@@ -280,16 +288,19 @@ public sealed class KitchenLogic : MonoBehaviour {
         comboManager.Start(this);
         relations.Start(this);
         orderManager.Start(this);
+        dishManager.Start(this);
         movingManager.Start(this);
     }
     #endregion
 
     public void TEST() { // todo: TEST
-        relations.ReceiveOrder(Order.Create(new Recipe(Ingredient.Ingredients.Bread, Ingredient.Ingredients.Meat, Ingredient.Ingredients.Bread), 10, 1));
+        relations.ReceiveOrder(Order.Create(new Recipe(
+            Prefabs.Kitchen.Ingredients.bread, Prefabs.Kitchen.Ingredients.meat, Prefabs.Kitchen.Ingredients.bread
+            ), 10, 1));
     }
 
     private void OnDrawGizmos() {
         orderManager.OnDrawGizmos();
-        dishCreator.OnDrawGizmos();
+        dishManager.OnDrawGizmos();
     }
 }

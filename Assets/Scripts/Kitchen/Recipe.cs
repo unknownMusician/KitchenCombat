@@ -26,4 +26,8 @@ public class Recipe {
         }*/
         return new Recipe(ingrs.ToArray());
     }
+
+    public static class Recipes {
+        public readonly static Recipe burger = new Recipe(GameLogic.Prefabs.Kitchen.Ingredients.bread, GameLogic.Prefabs.Kitchen.Ingredients.meat, GameLogic.Prefabs.Kitchen.Ingredients.bread);
+    }
 }

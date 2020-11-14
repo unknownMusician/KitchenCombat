@@ -2144,8 +2144,8 @@ MonoBehaviour:
     endPos: {x: -3.65, y: -7}
     moveSpeed: 3
     gap: 1.6
-  dishCreator:
-    dishPos: {x: 0, y: -4}
+  dishManager:
+    dishPos: {x: 0, y: -3.6}
     gap: 0.8
 --- !u!1 &1518823084
 GameObject:

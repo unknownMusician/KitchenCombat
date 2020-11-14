@@ -73,7 +73,7 @@ public sealed class UI : MonoBehaviour {
             float t = 0.2f;
             float l = 0;
             while (l < 1) {
-                float newL = LerpNormalize1(l);
+                float newL = Lerps.Normalizators.Squared(l);
                 float lerp = KitchenLook ? Mathf.Lerp(1, 0, newL) : Mathf.Lerp(0, 1, newL);
                 camTransform.position = new Vector3(lerp * cameraWidthWorld, camTransform.position.y, camTransform.position.z); // move camera
                 ui.transform.position = Vector2.zero; // move UI
@@ -83,11 +83,6 @@ public sealed class UI : MonoBehaviour {
             var fin = KitchenLook ? 0 : cameraWidthWorld;
             camTransform.position = new Vector3(fin, camTransform.position.y, camTransform.position.z); // move camera
             ui.transform.position = Vector2.zero; // move UI
-        }
-        protected float LerpNormalize1(float l) {
-            float x = (-1 + Mathf.Sqrt(5)) / 2;
-            return -1 / (l + x) + x + 1;
-            // return Mathf.Pow(l, 1/3f);
         }
     }
     [System.Serializable] public class Restaurant {

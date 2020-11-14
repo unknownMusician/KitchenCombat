@@ -34,7 +34,7 @@ public class RestaurantLogic : MonoBehaviour
     {
         StartCoroutine(CustomerSpawning());
         dish = Instantiate(
-            Prefabs.dish, 
+            Prefabs.Restaurant.dish, 
             inspectorValues.dishPoint.position, 
             Quaternion.identity, 
             inspectorValues.dishesMenu
@@ -111,7 +111,7 @@ public class RestaurantLogic : MonoBehaviour
 
     public void SpawnCustomer() 
     {
-        Instantiate(GameLogic.Prefabs.customer,
+        Instantiate(Prefabs.Restaurant.customer,
             inspectorValues.startPoint.position,
             Quaternion.identity,
             inspectorValues.customersArrayMenu
