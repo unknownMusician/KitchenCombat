@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.Events;
 using System.Collections.ObjectModel;
+using static GameLogic;
 
 
 public class RestaurantLogic : MonoBehaviour 
@@ -15,7 +16,6 @@ public class RestaurantLogic : MonoBehaviour
     private Dish dish;
 
     public InspectorValues inspectorValues = new InspectorValues();
-    public InputManager inputManager = default;
     [System.Serializable] public class InspectorValues 
     {
         [Header("Menus")]
@@ -39,7 +39,8 @@ public class RestaurantLogic : MonoBehaviour
     private void Start() 
     {
         StartCoroutine(CustomerSpawning());
-        dish = Instantiate(GameLogic.Prefabs.dish,
+        dish = Instantiate(
+            Prefabs.Restaurant.dish, 
             inspectorValues.dishPoint.position, 
             Quaternion.identity, 
             inspectorValues.dishesMenu
@@ -56,59 +57,49 @@ public class RestaurantLogic : MonoBehaviour
     {
         inputManager.OnSwipe -= Throw;
         inputManager.OnTap -= Drop;
+        // todo
     }
 
-    public class InputManager {
-        protected RestaurantLogic r;
-        public InputManager(RestaurantLogic r) {
-            this.r = r;
-            UI.instance.OnViewChange += CheckView;
-            coroutine = null;
-        }
+    bool isThrown;
+    void Throw(Vector2 dir) {
+        if (isThrown) { return; }
+        // todo 
+        // dish.RigidbodyComponent.AddForce(dir);
+        isThrown = true;
+    }
 
-        public UnityAction<Vector2> OnSwipe = default;
-        public UnityAction OnTap = default;
+    void Drop(Vector2 mouseWorldPos) {
+        if(!isThrown) { return; }
+        // todo
+        // dish.RigidbodyComponent.velocity = Vector2.zero;
+        // And so on...
+        isThrown = false;
+    }
 
-        protected Coroutine coroutine = default;
-        protected Vector2 mouseDownPos = default;
-        protected float mouseDownTime = default;
+    ///
+    private void OnEnable() {
+        InputManager.Actions.Restaurant.OnSwipe += Throw;
+        InputManager.Actions.Restaurant.OnTap += Drop;
+    }
 
-        public void CheckView(bool isKitchen) {
-            if (!isKitchen) {
-                if (coroutine == null) { coroutine = r.StartCoroutine(WaitForPress()); }
-            } else {
-                if (coroutine != null) {
-                    r.StopCoroutine(coroutine);
-                    coroutine = null;
-                }
-            }
-        }
-        public IEnumerator WaitForPress() {
-            while (true) {
-                if (Input.GetMouseButtonDown(0)) {
-                    mouseDownPos = Input.mousePosition;
-                    mouseDownTime = Time.time;
-                    coroutine = r.StartCoroutine(WaitForRelease());
-                    break;
-                }
-                yield return null;
-            }
-        }
-        public IEnumerator WaitForRelease() {
-            while (true) {
-                if (Input.GetMouseButtonUp(0)) {
-                    var localDir = (Vector2)Input.mousePosition - mouseDownPos;
-                    if (Time.time - mouseDownTime < 0.05f || localDir.magnitude < 30) {
-                        OnTap?.Invoke();
-                    } else {
-                        OnSwipe?.Invoke(localDir);
-                    }
-                    coroutine = r.StartCoroutine(WaitForPress());
-                    break;
-                }
-                yield return null;
-            }
-        }
+    private void OnDisable() {
+        InputManager.Actions.Restaurant.OnSwipe -= Throw; // Ctrl(Down) + K + C + Ctrl(Up) - comment
+        InputManager.Actions.Restaurant.OnTap -= Drop; // // Ctrl(Down) + K + U + Ctrl(Up) - UNcomment
+    }
+
+    public void RecieveDish(Dish dish, Order.OrderData orderData) {
+        print("Recieved");
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
+        // todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo todo
     }
 
     private IEnumerator CustomerSpawning() 
@@ -138,7 +129,7 @@ public class RestaurantLogic : MonoBehaviour
 
     public void SpawnCustomer() 
     {
-        Instantiate(GameLogic.Prefabs.customer,
+        Instantiate(Prefabs.Restaurant.customer,
             inspectorValues.startPoint.position,
             Quaternion.identity,
             inspectorValues.customersArrayMenu

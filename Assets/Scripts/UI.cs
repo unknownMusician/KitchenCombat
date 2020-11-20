@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
-public class UI : MonoBehaviour {
+public sealed class UI : MonoBehaviour {
 
     public static UI instance;
 
@@ -13,9 +13,9 @@ public class UI : MonoBehaviour {
     public Restaurant restaurant = null;
     public Kitchen kitchen = null;
 
-    public UnityAction<bool> OnViewChange = default;
+    public UnityAction<bool> OnViewChange { get; set; } = default; // todo unused
 
-    protected void Awake() {
+    private void Awake() {
         if (instance != null) { return; }
         instance = this;
 
@@ -30,9 +30,9 @@ public class UI : MonoBehaviour {
         protected UI ui = null;
 
         protected bool _kitchenLook = true;
-        protected bool KitchenLook {
+        public bool KitchenLook {
             get => _kitchenLook;
-            set {
+            private set {
                 _kitchenLook = value;
                 ui.OnViewChange?.Invoke(_kitchenLook);
             }
@@ -73,7 +73,7 @@ public class UI : MonoBehaviour {
             float t = 0.2f;
             float l = 0;
             while (l < 1) {
-                float newL = LerpNormalize1(l);
+                float newL = Lerps.Normalizators.Squared(l);
                 float lerp = KitchenLook ? Mathf.Lerp(1, 0, newL) : Mathf.Lerp(0, 1, newL);
                 camTransform.position = new Vector3(lerp * cameraWidthWorld, camTransform.position.y, camTransform.position.z); // move camera
                 ui.transform.position = Vector2.zero; // move UI
@@ -83,11 +83,6 @@ public class UI : MonoBehaviour {
             var fin = KitchenLook ? 0 : cameraWidthWorld;
             camTransform.position = new Vector3(fin, camTransform.position.y, camTransform.position.z); // move camera
             ui.transform.position = Vector2.zero; // move UI
-        }
-        protected float LerpNormalize1(float l) {
-            float x = (-1 + Mathf.Sqrt(5)) / 2;
-            return -1 / (l + x) + x + 1;
-            // return Mathf.Pow(l, 1/3f);
         }
     }
     [System.Serializable] public class Restaurant {
