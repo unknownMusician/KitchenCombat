@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 using UnityEngine.Events;
+using System.Collections.ObjectModel;
+
 
 public class RestaurantLogic : MonoBehaviour 
 {
@@ -11,7 +12,7 @@ public class RestaurantLogic : MonoBehaviour
     private Vector2 mouseDownPos;
     private float mouseDownTime;
 
-    private Dish dish = default;
+    private Dish dish;
 
     public InspectorValues inspectorValues = new InspectorValues();
     public InputManager inputManager = default;
@@ -30,44 +31,31 @@ public class RestaurantLogic : MonoBehaviour
         public Transform dishPoint;
     }
 
-    void Start() 
+    private void Awake()
     {
         inputManager = new InputManager(this);
+    }
+
+    private void Start() 
+    {
         StartCoroutine(CustomerSpawning());
-        dish = Instantiate(
-            GameLogic.Prefabs.dish, 
+        dish = Instantiate(GameLogic.Prefabs.dish,
             inspectorValues.dishPoint.position, 
             Quaternion.identity, 
             inspectorValues.dishesMenu
             ).GetComponent<Dish>();
-        // todo
     }
 
-    bool isThrown;
-    void Throw(Vector2 dir) {
-        if (isThrown) { return; }
-        // todo 
-        // dish.RigidbodyComponent.AddForce(dir);
-        isThrown = true;
-    }
-
-    void Drop() {
-        if(!isThrown) { return; }
-        // todo
-        // dish.RigidbodyComponent.velocity = Vector2.zero;
-        // And so on...
-        isThrown = false;
-    }
-
-    ///
-    private void OnEnable() {
+    private void OnEnable()
+    {
         inputManager.OnSwipe += Throw;
         inputManager.OnTap += Drop;
     }
 
-    private void OnDisable() {
-        inputManager.OnSwipe -= Throw; // Ctrl(Down) + K + C + Ctrl(Up) - comment
-        inputManager.OnTap -= Drop; // // Ctrl(Down) + K + U + Ctrl(Up) - UNcomment
+    private void OnDisable()
+    {
+        inputManager.OnSwipe -= Throw;
+        inputManager.OnTap -= Drop;
     }
 
     public class InputManager {
@@ -132,7 +120,7 @@ public class RestaurantLogic : MonoBehaviour
         }
     }
 
-    [SerializeField] private float delayCoefficient = default;
+    [SerializeField] private float delayCoefficient;
     private float CalculateDelay() 
     {
         // Метод расчитывает задержку между приходом покупателей
@@ -192,5 +180,20 @@ public class RestaurantLogic : MonoBehaviour
 
         return -1;
 
+    }
+
+    bool isThrown;
+    void Throw(Vector2 dir)
+    {
+        if (isThrown) { return; }
+        dish.RigidbodyComponent.AddForce(dir);
+        isThrown = true;
+    }
+
+    void Drop()
+    {
+        if (!isThrown) { return; }
+        // dish.RigidbodyComponent.velocity = Vector2.zero;
+        isThrown = false;
     }
 }
