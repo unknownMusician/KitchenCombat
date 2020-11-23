@@ -46,6 +46,8 @@ public class RestaurantLogic : MonoBehaviour
             Quaternion.identity, 
             inspectorValues.dishesMenu
             ).GetComponent<Dish>();
+        // UI.instance.OnViewChange += lambda or func_name (animate dish)
+        // kitchen - true, restaurant - false
     }
 
     private void OnEnable()
