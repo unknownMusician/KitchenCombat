@@ -17,7 +17,6 @@ public class Dish : MonoBehaviour
         Collider2D[] collidedObjects = Physics2D.OverlapCircleAll(transform.position, 1);
         foreach (Collider2D collider in collidedObjects)
         {
-            Debug.Log(collider.transform.name);
             if (collider.transform.name[0] == 'T')
             {
                 RigidbodyComponent.velocity = Vector2.zero;
