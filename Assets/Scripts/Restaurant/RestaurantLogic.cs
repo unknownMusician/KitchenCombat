@@ -30,7 +30,6 @@ public class RestaurantLogic : MonoBehaviour
 
     private Vector2 mouseDownPos;
     private float mouseDownTime;
-    private bool isThrown;
     private Dish dish;
 
     #endregion
@@ -143,16 +142,15 @@ public class RestaurantLogic : MonoBehaviour
 
     private void Throw(Vector2 dir)
     {
-        if (isThrown) { return; }
-        dish.RigidbodyComponent.AddForce(dir);
-        isThrown = true;
+        if (dish.IsThrown) { return; }
+        dish.coroutine = dish.Throw(dir);
+        dish.StartCoroutine(dish.coroutine);
     }
 
     private void Drop(Vector2 dir)
     {
-        if (!isThrown) { return; }
+        if ((!dish.IsThrown) || (dish.IsLanded)) { return; }
         dish.Land();
-        // isThrown = false;
     }
 
     #endregion
