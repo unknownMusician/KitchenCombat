@@ -4,12 +4,13 @@ using System.Collections.ObjectModel;
 using static GameLogic;
 
 
-public class RestaurantLogic : MonoBehaviour 
+public class RestaurantLogic : MonoBehaviour
 {
     #region Properties
 
     [SerializeField] private float delayCoefficient;
-    [System.Serializable] public class InspectorValues
+    [System.Serializable]
+    public class InspectorValues
     {
         [Header("Menus")]
         public Transform customersArrayMenu;
@@ -18,6 +19,7 @@ public class RestaurantLogic : MonoBehaviour
         public Transform dishesMenu;
 
         [Header("Points")]
+        public Transform giveDisPoint;
         public Transform startPoint;
         public Transform exitPoint;
         public Transform waitPoint;
@@ -36,15 +38,9 @@ public class RestaurantLogic : MonoBehaviour
 
     #region Behaviour methods
 
-    private void Start() 
+    private void Start()
     {
         StartCoroutine(CustomerSpawning());
-        dish = Instantiate(
-            Prefabs.Restaurant.dish, 
-            inspectorValues.dishPoint.position, 
-            Quaternion.identity, 
-            inspectorValues.dishesMenu
-            ).GetComponent<Dish>();
         // UI.instance.OnViewChange += lambda or func_name (animate dish)
         // kitchen - true, restaurant - false
     }
@@ -65,15 +61,17 @@ public class RestaurantLogic : MonoBehaviour
 
     #region Methods
 
-    public void RecieveDish(Dish dish, Order.OrderData orderData) {
+    public void RecieveDish(Dish dish, Order.OrderData orderData)
+    {
+        // dish.transform.SetParent(inspectorValues.dishesMenu);
+        // dish.transform.position = inspectorValues.giveDisPoint.position;
         print("Recieved");
         // todo
     }
 
     private IEnumerator CustomerSpawning()
     {
-        while (true)
-        {
+        while (true) {
             yield return new WaitForSeconds(CalculateDelay() + Random.Range(0, 5000) / 1000);
             SpawnCustomer();
         }
@@ -84,16 +82,13 @@ public class RestaurantLogic : MonoBehaviour
         int tablesArrayLength = inspectorValues.tablesArrayMenu.childCount;
         Collection<int> freeTablesIndexes = new Collection<int>();
 
-        for (int i = 0; i < tablesArrayLength; i++)
-        {
-            if (inspectorValues.tablesArrayMenu.GetChild(i).GetComponent<Table>().IsFree)
-            {
+        for (int i = 0; i < tablesArrayLength; i++) {
+            if (inspectorValues.tablesArrayMenu.GetChild(i).GetComponent<Table>().IsFree) {
                 freeTablesIndexes.Add(i);
             }
         }
 
-        if (freeTablesIndexes.Count != 0)
-        {
+        if (freeTablesIndexes.Count != 0) {
             return freeTablesIndexes[Random.Range(0, freeTablesIndexes.Count)];
         }
 
@@ -105,10 +100,8 @@ public class RestaurantLogic : MonoBehaviour
     {
         int tablesArrayLength = inspectorValues.tablesArrayMenu.childCount;
 
-        for (int i = 0; i < tablesArrayLength; i++)
-        {
-            if (inspectorValues.tablesArrayMenu.GetChild(i).GetComponent<Table>().IsFree)
-            {
+        for (int i = 0; i < tablesArrayLength; i++) {
+            if (inspectorValues.tablesArrayMenu.GetChild(i).GetComponent<Table>().IsFree) {
                 return true;
             }
         }
@@ -131,7 +124,7 @@ public class RestaurantLogic : MonoBehaviour
         return result;
     }
 
-    private void SpawnCustomer() 
+    private void SpawnCustomer()
     {
         Instantiate(Prefabs.Restaurant.customer,
             inspectorValues.startPoint.position,

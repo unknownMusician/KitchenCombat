@@ -33,8 +33,12 @@ public class DishBuilder : MonoBehaviour {
         // todo: show or do nt show a shadow
     }
     public Dish Finalize() {
-        var dish = Instantiate(GameLogic.Prefabs.Restaurant.dish).GetComponent<Dish>(); // todo: move to Dish.cs
+        Dish dish = Instantiate(GameLogic.Prefabs.Restaurant.dish).GetComponent<Dish>(); // todo: move to Dish.cs
         transform.SetParent(dish.transform);
+        while (transform.childCount > 0) {
+            // transform.GetChild(0).position += 0.8f * Vector3.up;
+            transform.GetChild(0).SetParent(dish.transform);
+        }
         transform.localPosition = Vector2.zero;
         return dish;
     }
