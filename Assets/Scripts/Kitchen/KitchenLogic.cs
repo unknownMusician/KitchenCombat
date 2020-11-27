@@ -195,6 +195,7 @@ public sealed class KitchenLogic : MonoBehaviour {
             var finDish = actualDish.Finalize();
             var orderData = order.TurnToData();
             // Fin corrections
+            Destroy(actualDish);
             actualDish = null;
             // todo anim;
             k.StartCoroutine(DishFinalization(finDish.transform, 1,
