@@ -24,15 +24,15 @@ public class Order : MonoBehaviour {
         int size = recipe.Ingredients.Count;
         for (int i = 0; i < size; i++) {
             // Creating Order Note
-            GameObject note = new GameObject("OrderNote");
-            note.transform.SetParent(order.transform);
-            note.transform.localPosition = new Vector2(-0.2f, 0.6f - 0.3f * i);
+            Transform noteTransform = new GameObject("OrderNote").transform;
+            noteTransform.SetParent(order.transform);
+            noteTransform.localPosition = new Vector2(-0.2f, 0.6f - 0.3f * i);
             // Filling Order Note; [0] - Icon; [1] - Text;
             var noteParts = new[] { new GameObject("NoteIcon", typeof(SpriteRenderer)), new GameObject("NoteText", typeof(SpriteRenderer)) };
             for(int j = 0; j < noteParts.Length; j++) {
                 noteParts[j].GetComponent<SpriteRenderer>().sprite = j == 0 ? recipe.Ingredients[i].OrderIcon : recipe.Ingredients[i].OrderTextIcon;
                 noteParts[j].GetComponent<SpriteRenderer>().sortingOrder = order.GetComponent<SpriteRenderer>().sortingOrder + 1; // todo: optimize
-                noteParts[j].transform.SetParent(note.transform);
+                noteParts[j].transform.SetParent(noteTransform);
                 noteParts[j].transform.localPosition = j == 0 ? Vector2.left * 0.2f : Vector2.right * 0.4f;
             }
         }

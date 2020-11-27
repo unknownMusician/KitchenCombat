@@ -51,10 +51,6 @@ public sealed class GameLogic : MonoBehaviour {
                 public static UnityAction<Vector2> OnPress = default;
                 public static UnityAction<Vector2> OnRelease = default;
             }
-            //public static class Common {
-            //    public static UnityAction<Vector2> OnPress = default;
-            //    public static UnityAction<Vector2> OnRelease = default;
-            //} // todo: remove
         }
         public enum Swipe { Up, Down, Left, Right }
         public static Vector2 MouseWorldPosition => Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -118,7 +114,7 @@ public sealed class GameLogic : MonoBehaviour {
             }
         }
 
-        private static void InvokeNormalizedSwipe(Vector2 direction, UnityAction<Swipe> onSwipe) { // todo: make swipes only work when in Kitchen
+        private static void InvokeNormalizedSwipe(Vector2 direction, UnityAction<Swipe> onSwipe) {
             if (direction.magnitude == 0) { return; }
             onSwipe?.Invoke(
                 Mathf.Abs(direction.x) > Mathf.Abs(direction.y) ?

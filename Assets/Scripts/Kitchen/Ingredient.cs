@@ -26,6 +26,4 @@ public class Ingredient : MonoBehaviour {
         }
         return null;
     }
-
-    public override bool Equals(object ingrObj) => Service.CompareLists(neededCombo, ((Ingredient)ingrObj)?.neededCombo); // todo: remove
 }

@@ -13,7 +13,7 @@ public sealed class UI : MonoBehaviour {
     public Restaurant restaurant = null;
     public Kitchen kitchen = null;
 
-    public UnityAction<bool> OnViewChange { get; set; } = default; // todo unused
+    public UnityAction<bool> OnViewChange { get; set; } = default;
 
     private void Awake() {
         if (instance != null) { return; }

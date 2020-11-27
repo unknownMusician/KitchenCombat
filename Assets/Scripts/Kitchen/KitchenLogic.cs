@@ -12,23 +12,12 @@ public sealed class KitchenLogic : MonoBehaviour {
     public Transform GameMenu { get; set; } = default;
     public RectTransform UIMenu { get; set; } = default;
 
-    [SerializeField] private Main main = default; // todo: unused
     [SerializeField] private ComboManager comboManager = default;
     [SerializeField] public Relations relations = default;
     [SerializeField] private OrderManager orderManager = default;
     [SerializeField] private DishManager dishManager = default;
     [SerializeField] private MovingManager movingManager = default;
 
-    // todo: unused
-    [System.Serializable]
-    private sealed class Main {
-        #region Constructor & k
-
-        private KitchenLogic k;
-        public void Start(KitchenLogic k) { this.k = k; }
-        #endregion
-
-    }
     [System.Serializable]
     private sealed class ComboManager {
         #region Constructor & k
@@ -284,7 +273,6 @@ public sealed class KitchenLogic : MonoBehaviour {
     #region Mono
 
     private void Awake() {
-        main.Start(this);
         comboManager.Start(this);
         relations.Start(this);
         orderManager.Start(this);
