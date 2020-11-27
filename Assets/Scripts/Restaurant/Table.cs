@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using KC.Common;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class Table : MonoBehaviour 
@@ -35,7 +36,7 @@ public class Table : MonoBehaviour
 
         if (OrderInTablesArray == otherCustomerComponent.CurrentTableNumber) 
         {
-            otherCustomerComponent.StartCoroutine("Stop");
+            otherCustomerComponent.StartCoroutine(otherCustomerComponent.Stop());
             /* otherCustomerComponent.MakeAnOrder();
             otherCustomerComponent.LeaveRestaurant(); */
         }

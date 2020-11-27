@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.ObjectModel;
-using static GameLogic;
-
+using KC.Common;
 
 public class RestaurantLogic : MonoBehaviour
 {
     #region Properties
 
-    [SerializeField] private float delayCoefficient;
+    [SerializeField] private float delayCoefficient = default;
     [System.Serializable]
     public class InspectorValues
     {
@@ -25,14 +24,14 @@ public class RestaurantLogic : MonoBehaviour
         public Transform waitPoint;
         public Transform dishPoint;
     }
-    public InspectorValues inspectorValues;
+    public InspectorValues inspectorValues = default;
 
     public RectTransform UIMenu { get; set; } = default;
     public Transform GameMenu { get; set; } = default;
 
-    private Vector2 mouseDownPos;
-    private float mouseDownTime;
-    private Dish dish;
+    private Vector2 mouseDownPos = default;
+    private float mouseDownTime = default;
+    private Dish dish = default;
 
     #endregion
 
@@ -47,14 +46,14 @@ public class RestaurantLogic : MonoBehaviour
 
     private void OnEnable()
     {
-        GameLogic.InputManager.Actions.Restaurant.OnSwipe += Throw;
-        GameLogic.InputManager.Actions.Restaurant.OnTap += Drop;
+        InputManager.Actions.Restaurant.OnSwipe += Throw;
+        InputManager.Actions.Restaurant.OnTap += Drop;
     }
 
     private void OnDisable()
     {
-        GameLogic.InputManager.Actions.Restaurant.OnSwipe -= Throw;
-        GameLogic.InputManager.Actions.Restaurant.OnTap -= Drop;
+        InputManager.Actions.Restaurant.OnSwipe -= Throw;
+        InputManager.Actions.Restaurant.OnTap -= Drop;
     }
 
     #endregion

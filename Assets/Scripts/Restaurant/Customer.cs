@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using KC.Common;
+using KC.Kitchen;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -51,7 +53,7 @@ public class Customer : MonoBehaviour
 
     public void MakeAnOrder()
     {
-        GameLogic.Kitchen.relations.ReceiveOrder(Order.Create(Recipe.GenerateRecipe(), 60, CurrentTableNumber));
+        GameLogic.Kitchen.ReceiveOrder(Order.Create(Recipe.GenerateRecipe(), 60, CurrentTableNumber));
     }
 
     public void LeaveRestaurant()
