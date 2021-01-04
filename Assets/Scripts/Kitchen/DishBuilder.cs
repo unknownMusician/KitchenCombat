@@ -1,5 +1,4 @@
 ﻿using KC.Common;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace KC.Kitchen {
         [HideInInspector] public List<Ingredient> ingredients = new List<Ingredient>();
 
         protected DishBuilder() { }
-        public static DishBuilder Create() => Instantiate(Prefabs.Kitchen.dishBuilder).GetComponent<DishBuilder>();
+        public static DishBuilder Create() => new GameObject("Dish builder", typeof(DishBuilder)).GetComponent<DishBuilder>();
         public void AddIngredient(Ingredient ingredient, float gap) {
             ingredients.Add(ingredient);
 

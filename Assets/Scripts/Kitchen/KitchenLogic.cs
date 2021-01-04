@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// todo:
-/// - fix dish creating
+/// - add animator
 /// - anim adding ingredient
 /// - invent more ingredients
 /// 

@@ -1,5 +1,4 @@
-﻿using KC.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace KC.Common {
@@ -29,5 +28,6 @@ namespace KC.Common {
         }
         // for Dish-Ingredients comparison
         public override bool Equals(object ingrObj) => Service.CompareLists(neededCombo, ((Ingredient)ingrObj)?.neededCombo);
+        public override int GetHashCode() => base.GetHashCode();
     }
 }

@@ -6,16 +6,22 @@ namespace KC.Common {
         public float Price { get; protected set; } = default;
 
         public Recipe(params Ingredient[] ingredients) {
-            this.Ingredients = new List<Ingredient>(ingredients);
-            this.Price = 0;
+            Ingredients = new List<Ingredient>(ingredients);
+            Price = 0;
             foreach (var ingr in ingredients) {
                 this.Price += ingr.Price;
             }
         }
 
+        private static Recipe GenerateBurger() {
+            var ingrs = new List<Ingredient>();
+            // todo
+            return new Recipe(ingrs.ToArray());
+        }
+
         public static Recipe GenerateRecipe() {
             // todo: generating algorythm
-            var ingrs = new List<Ingredient>();
+
             /*
             if (level == 4) {
                 ingrs.Add(Ingredient.ingredients[2]);
@@ -23,7 +29,7 @@ namespace KC.Common {
             }else if (...) {
                 // todo
             }*/
-            return new Recipe(ingrs.ToArray());
+            return GenerateBurger();
         }
 
         public static class Recipes {
