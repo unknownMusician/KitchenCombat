@@ -2227,7 +2227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dishPos: {x: 0, y: -3.6}
-  gap: 0.8
+  gap: 0.4
 --- !u!114 &1517034762
 MonoBehaviour:
   m_ObjectHideFlags: 0
